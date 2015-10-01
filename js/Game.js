@@ -36,6 +36,10 @@ TopDownGame.Game.prototype = {
     //move player with cursor keys
     this.cursors = this.game.input.keyboard.createCursorKeys();
 
+    this.player.animations.add('left', [4, 5, 6, 7], 17, true);
+    this.player.animations.add('right', [8, 9, 10, 11], 17, true);
+    this.player.animations.add('down', [0, 1, 2, 3], 17, true);
+    this.player.animations.add('up', [12, 13, 14, 15], 17, true);
   },
   createItems: function() {
     //create items
@@ -100,15 +104,21 @@ TopDownGame.Game.prototype = {
 
     if(this.cursors.up.isDown) {
       this.player.body.velocity.y -= 50;
+      this.player.animations.play('up');
     }
     else if(this.cursors.down.isDown) {
       this.player.body.velocity.y +=50;
-    }
-    if(this.cursors.left.isDown) {
+      this.player.animations.play('down');
+    } else if(this.cursors.left.isDown) {
       this.player.body.velocity.x -= 50;
+      this.player.animations.play('left');
     }
     else if(this.cursors.right.isDown) {
       this.player.body.velocity.x +=50;
+      this.player.animations.play('right');
+    } else {
+      this.player.animations.stop();
+      this.player.frame = 0;
     }
 
     //collission
