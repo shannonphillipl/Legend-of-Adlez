@@ -36,10 +36,10 @@ TopDownGame.Game.prototype = {
     //move player with cursor keys
     this.cursors = this.game.input.keyboard.createCursorKeys();
 
-    this.player.animations.add('left', [4, 5, 6, 7], 17, true);
-    this.player.animations.add('right', [8, 9, 10, 11], 17, true);
-    this.player.animations.add('down', [0, 1, 2, 3], 17, true);
-    this.player.animations.add('up', [12, 13, 14, 15], 17, true);
+    this.player.animations.add('left', [4, 5, 6, 7], 7, true);
+    this.player.animations.add('right', [8, 9, 10, 11], 7, true);
+    this.player.animations.add('down', [0, 1, 2, 3], 7, true);
+    this.player.animations.add('up', [12, 13, 14, 15], 7, true);
   },
   createItems: function() {
     //create items
