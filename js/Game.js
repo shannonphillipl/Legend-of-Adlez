@@ -23,6 +23,8 @@ TopDownGame.Game.prototype = {
     this.createItems();
     this.createDoors();
     this.createZeldaBullets();
+    this.createGoons();
+    this.createExplosions();
 
     //create player
     var result = this.findObjectsByType('playerStart', this.map, 'objectsLayer')
@@ -33,11 +35,16 @@ TopDownGame.Game.prototype = {
 
     //the camera follows player
     this.game.camera.follow(this.player);
-    this.zeldaBullet = this.game.add.sprite('zeldaBullet');
 
-    this.zeldaBulletTime = 0;
+    //add non-player spritesheets
+    this.zeldaBullet = this.game.add.sprite('zeldaBullet');
+    this.goons = this.game.add.sprite('goon');
+
+
     //move player with cursor keys
     this.cursors = this.game.input.keyboard.createCursorKeys();
+
+    this.zeldaBulletTime = 0;
     this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
     this.player.animations.add('left', [4, 5, 6, 7], 7, true);
@@ -48,6 +55,8 @@ TopDownGame.Game.prototype = {
     this.zeldaBullets.callAll('animations.add', 'animations', 'right', [4, 5, 6, 7], 7, true);
     this.zeldaBullets.callAll('animations.add', 'animations', 'down', [12, 13, 14, 15], 7, true);
     this.zeldaBullets.callAll('animations.add', 'animations', 'up', [0, 1, 2, 3], 7, true);
+    this.zeldaBullets.callAll('animations.add', 'animations', 'up', [0, 1, 2, 3], 7, true);
+    this.explosions.callAll('animations.add', 'animations', 'kaboom', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], 15, true);
   },
   createItems: function() {
     //create items
@@ -74,12 +83,44 @@ TopDownGame.Game.prototype = {
   createDoors: function() {
     this.doors = this.game.add.group();
     this.doors.enableBody = true;
-    result = this.findObjectsByType('door', this.map, 'objectsLayer');
+    this.result = this.findObjectsByType('door', this.map, 'objectsLayer');
 
-    result.forEach(function(element) {
+    this.result.forEach(function(element) {
       this.createFromTiledObject(element, this.doors);
     }, this);
   },
+
+  createExplosions: function() {
+
+    this.explosions = this.game.add.group();
+    this.explosions.createMultiple(30, 'kaboom');
+    this.explosions.forEach(this.setupGoon, this);
+  },
+
+  setupGoon: function(goon) {
+    this.goon.anchor.x = 0.5;
+    this.goon.anchor.y = 0.5;
+    this.goon.animations.add('kaboom');
+  },
+
+  createGoons: function() {
+    this.goons = this.game.add.group();
+    this.goons.enableBody = true;
+    this.goons.physicsBodyType = Phaser.Physics.ARCADE;
+
+    this.goon = this.goons.create(48, 50, 'goon');
+    this.goon.anchor.setTo(0.5, 0.5);
+    this.goon.animations.add('down', [0, 1, 2, 3], 20, true);
+    this.goon.play('down');
+    this.goon.body.moves = false;
+
+    this.goons.x = 250;
+    this.goons.y = 100;
+
+    this.tween = this.game.add.tween(this.goons).to( { y: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+  },
+
+
   //find objects in a TIled layer that containt a property called "type" equal to a certain value
   findObjectsByType: function(type, map, layer) {
     var result = new Array();
@@ -142,9 +183,18 @@ TopDownGame.Game.prototype = {
   //Collecting items
   collect: function(player, collectable) {
     console.log('yummy!');
-
     //remove sprite
     collectable.destroy();
+  },
+
+  collisionHandler: function(zeldaBullet, goon) {
+
+    this.zeldaBullet.kill();
+    this.goon.kill();
+    //  And create an explosion :)
+    this.explosion = this.explosions.getFirstExists(false);
+    this.explosion.reset(this.goon.body.x, this.goon.body.y);
+    this.explosion.play('kaboom', 30, false, true);
   },
 
   enterDoor: function(player, door) {
@@ -188,7 +238,7 @@ TopDownGame.Game.prototype = {
     this.game.physics.arcade.collide(this.player, this.blockedLayer);
     this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
     this.game.physics.arcade.overlap(this.player, this.doors, this.enterDoor, null, this);
-
+    this.game.physics.arcade.overlap(this.zeldaBullet, this.goon, this.collisionHandler, null, this);
 
   },
 
