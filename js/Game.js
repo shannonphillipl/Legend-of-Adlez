@@ -33,7 +33,9 @@ TopDownGame.Game.prototype = {
 
     //the camera follows player
     this.game.camera.follow(this.player);
+    this.zeldaBullet = this.game.add.sprite(0, 0, 'zeldaBullet');
 
+    this.zeldaBulletTime = 0;
     //move player with cursor keys
     this.cursors = this.game.input.keyboard.createCursorKeys();
     this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -42,6 +44,10 @@ TopDownGame.Game.prototype = {
     this.player.animations.add('right', [8, 9, 10, 11], 7, true);
     this.player.animations.add('down', [0, 1, 2, 3], 7, true);
     this.player.animations.add('up', [12, 13, 14, 15], 7, true);
+    this.zeldaBullet.animations.add('left', [8, 9, 10, 11], 7, true);
+    this.zeldaBullet.animations.add('right', [4, 5, 6, 7], 7, true);
+    this.zeldaBullet.animations.add('down', [12, 13, 14, 15], 7, true);
+    this.zeldaBullet.animations.add('up', [0, 1, 2, 3], 7, true);
   },
   createItems: function() {
     //create items
@@ -89,16 +95,31 @@ TopDownGame.Game.prototype = {
 
   //fire bullet
   fireBullet: function() {
-    this.zeldaBulletTime = 0;
+
     if (this.game.time.now > this.zeldaBulletTime) {
       //  Grab the first bullet we can from the pool
       this.zeldaBullet = this.zeldaBullets.getFirstExists(false);
 
       if (this.zeldaBullet) {
           //  And fire it
-          this.zeldaBullet.reset(this.player.x + 16, this.player.y + 8);
-          this.zeldaBullet.body.velocity.y = -400;
-          this.zeldaBulletTime = this.game.time.now + 200;
+          if (this.player.facing == "right") {
+            this.zeldaBullet.reset(this.player.x + 25, this.player.y + 21);
+            this.zeldaBullet.animations.play('right');
+            this.zeldaBullet.body.velocity.x = 200;
+            this.zeldaBulletTime = this.game.time.now + 200;
+          } else if (this.player.facing == "up") {
+            this.zeldaBullet.reset(this.player.x + 16, this.player.y + 8);
+            this.zeldaBullet.body.velocity.y = -200;
+            this.zeldaBulletTime = this.game.time.now + 200;
+          } else if (this.player.facing == "left") {
+            this.zeldaBullet.reset(this.player.x + 5, this.player.y + 21);
+            this.zeldaBullet.body.velocity.x = -200;
+            this.zeldaBulletTime = this.game.time.now + 200;
+          } else if (this.player.facing == "down") {
+            this.zeldaBullet.reset(this.player.x + 15, this.player.y + 35);
+            this.zeldaBullet.body.velocity.y = 200;
+            this.zeldaBulletTime = this.game.time.now + 200;
+          }
       }
 
     }
@@ -139,17 +160,19 @@ TopDownGame.Game.prototype = {
     this.player.body.velocity.x = 0;
 
     if(this.cursors.up.isDown) {
+      this.player.facing = "up";
       this.player.body.velocity.y -= 50;
       this.player.animations.play('up');
-    }
-    else if(this.cursors.down.isDown) {
+    } else if(this.cursors.down.isDown) {
+      this.player.facing = "down";
       this.player.body.velocity.y +=50;
       this.player.animations.play('down');
     } else if(this.cursors.left.isDown) {
+      this.player.facing = "left";
       this.player.body.velocity.x -= 50;
       this.player.animations.play('left');
-    }
-    else if(this.cursors.right.isDown) {
+    } else if(this.cursors.right.isDown) {
+      this.player.facing = "right";
       this.player.body.velocity.x +=50;
       this.player.animations.play('right');
     } else if (this.fireButton.isDown) {
