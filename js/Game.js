@@ -56,6 +56,7 @@ TopDownGame.Game.prototype = {
     this.zeldaBullets.callAll('animations.add', 'animations', 'down', [12, 13, 14, 15], 7, true);
     this.zeldaBullets.callAll('animations.add', 'animations', 'up', [0, 1, 2, 3], 7, true);
     this.zeldaBullets.callAll('animations.add', 'animations', 'up', [0, 1, 2, 3], 7, true);
+    this.explosions.callAll('animations.add', 'animations', 'kaboom', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], 15, true);
   },
   createItems: function() {
     //create items
@@ -182,19 +183,16 @@ TopDownGame.Game.prototype = {
   //Collecting items
   collect: function(player, collectable) {
     console.log('yummy!');
-
     //remove sprite
     collectable.destroy();
   },
 
-  collisionHandler: function(bullet, goon) {
+  collisionHandler: function(zeldaBullet, goon) {
 
-    //  When a bullet hits an alien we kill them both
-    this.bullet.kill();
+    this.zeldaBullet.kill();
     this.goon.kill();
-
     //  And create an explosion :)
-    var explosion = this.explosions.getFirstExists(false);
+    this.explosion = this.explosions.getFirstExists(false);
     this.explosion.reset(this.goon.body.x, this.goon.body.y);
     this.explosion.play('kaboom', 30, false, true);
   },
@@ -240,7 +238,7 @@ TopDownGame.Game.prototype = {
     this.game.physics.arcade.collide(this.player, this.blockedLayer);
     this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
     this.game.physics.arcade.overlap(this.player, this.doors, this.enterDoor, null, this);
-    this.game.physics.arcade.overlap(this.zeldaBullets, this.goons, this.collisionHandler, null, this);
+    this.game.physics.arcade.overlap(this.zeldaBullet, this.goon, this.collisionHandler, null, this);
 
   },
 
