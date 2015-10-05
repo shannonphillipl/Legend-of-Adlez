@@ -109,17 +109,17 @@ TopDownGame.Game.prototype = {
             this.zeldaBulletTime = this.game.time.now + 200;
           } else if (this.player.facing == "up") {
             this.zeldaBullets.callAllExists('play', false, 'up');
-            this.zeldaBullet.reset(this.player.x + 16, this.player.y + 8);
+            this.zeldaBullet.reset(this.player.x + 16, this.player.y + 10);
             this.zeldaBullet.body.velocity.y = -200;
             this.zeldaBulletTime = this.game.time.now + 200;
           } else if (this.player.facing == "left") {
             this.zeldaBullets.callAllExists('play', false, 'left');
-            this.zeldaBullet.reset(this.player.x + 5, this.player.y + 21);
+            this.zeldaBullet.reset(this.player.x + 5, this.player.y + 30);
             this.zeldaBullet.body.velocity.x = -200;
             this.zeldaBulletTime = this.game.time.now + 200;
           } else if (this.player.facing == "down") {
             this.zeldaBullets.callAllExists('play', false, 'down');
-            this.zeldaBullet.reset(this.player.x + 15, this.player.y + 35);
+            this.zeldaBullet.reset(this.player.x + 16, this.player.y + 40);
             this.zeldaBullet.body.velocity.y = 200;
             this.zeldaBulletTime = this.game.time.now + 200;
           }
