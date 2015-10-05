@@ -24,6 +24,7 @@ TopDownGame.Game.prototype = {
     this.createDoors();
     this.createZeldaBullets();
     this.createGoons();
+    this.createExplosions();
 
     //create player
     var result = this.findObjectsByType('playerStart', this.map, 'objectsLayer')
@@ -86,6 +87,19 @@ TopDownGame.Game.prototype = {
     this.result.forEach(function(element) {
       this.createFromTiledObject(element, this.doors);
     }, this);
+  },
+
+  createExplosions: function() {
+
+    this.explosions = this.game.add.group();
+    this.explosions.createMultiple(30, 'kaboom');
+    this.explosions.forEach(this.setupGoon, this);
+  },
+
+  setupGoon: function(goon) {
+    this.goon.anchor.x = 0.5;
+    this.goon.anchor.y = 0.5;
+    this.goon.animations.add('kaboom');
   },
 
   createGoons: function() {
@@ -173,6 +187,18 @@ TopDownGame.Game.prototype = {
     collectable.destroy();
   },
 
+  collisionHandler: function(bullet, goon) {
+
+    //  When a bullet hits an alien we kill them both
+    this.bullet.kill();
+    this.goon.kill();
+
+    //  And create an explosion :)
+    var explosion = this.explosions.getFirstExists(false);
+    this.explosion.reset(this.goon.body.x, this.goon.body.y);
+    this.explosion.play('kaboom', 30, false, true);
+  },
+
   enterDoor: function(player, door) {
     console.log('entering door that will take you to '+door.targetTilemap+' on x:'+door.targetX+' and y:'+door.targetY);
   },
@@ -214,7 +240,7 @@ TopDownGame.Game.prototype = {
     this.game.physics.arcade.collide(this.player, this.blockedLayer);
     this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
     this.game.physics.arcade.overlap(this.player, this.doors, this.enterDoor, null, this);
-
+    this.game.physics.arcade.overlap(this.zeldaBullets, this.goons, this.collisionHandler, null, this);
 
   },
 
