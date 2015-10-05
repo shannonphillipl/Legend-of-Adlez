@@ -33,7 +33,7 @@ TopDownGame.Game.prototype = {
 
     //the camera follows player
     this.game.camera.follow(this.player);
-    this.zeldaBullet = this.game.add.sprite(0, 0, 'zeldaBullet');
+    this.zeldaBullet = this.game.add.sprite('zeldaBullet');
 
     this.zeldaBulletTime = 0;
     //move player with cursor keys
