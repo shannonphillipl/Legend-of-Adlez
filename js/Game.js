@@ -22,6 +22,7 @@ TopDownGame.Game.prototype = {
 
     this.createItems();
     this.createDoors();
+    this.createZeldaBullets();
 
     //create player
     var result = this.findObjectsByType('playerStart', this.map, 'objectsLayer')
@@ -35,6 +36,7 @@ TopDownGame.Game.prototype = {
 
     //move player with cursor keys
     this.cursors = this.game.input.keyboard.createCursorKeys();
+    this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
     this.player.animations.add('left', [4, 5, 6, 7], 7, true);
     this.player.animations.add('right', [8, 9, 10, 11], 7, true);
@@ -50,6 +52,17 @@ TopDownGame.Game.prototype = {
     result.forEach(function(element) {
       this.createFromTiledObject(element, this.items);
     }, this);
+  },
+
+  createZeldaBullets: function() {
+    this.zeldaBullets = this.game.add.group();
+    this.zeldaBullets.enableBody = true;
+    this.zeldaBullets.physicsBodyType = Phaser.Physics.ARCADE;
+    this.zeldaBullets.createMultiple(30, 'zeldaBullet');
+    this.zeldaBullets.setAll('anchor.x', 0.5);
+    this.zeldaBullets.setAll('anchor.y', 1);
+    this.zeldaBullets.setAll('outOfBoundsKill', true);
+    this.zeldaBullets.setAll('checkWorldBounds', true);
   },
 
   createDoors: function() {
@@ -71,6 +84,24 @@ TopDownGame.Game.prototype = {
       }
     });
     return result;
+  },
+
+
+  //fire bullet
+  fireBullet: function() {
+    this.zeldaBulletTime = 0;
+    if (this.game.time.now > this.zeldaBulletTime) {
+      //  Grab the first bullet we can from the pool
+      this.zeldaBullet = this.zeldaBullets.getFirstExists(false);
+
+      if (this.zeldaBullet) {
+          //  And fire it
+          this.zeldaBullet.reset(this.player.x + 16, this.player.y + 8);
+          this.zeldaBullet.body.velocity.y = -400;
+          this.zeldaBulletTime = this.game.time.now + 200;
+      }
+
+    }
   },
 
   //create a sprite from an object
@@ -96,6 +127,11 @@ TopDownGame.Game.prototype = {
     console.log('entering door that will take you to '+door.targetTilemap+' on x:'+door.targetX+' and y:'+door.targetY);
   },
 
+  resetZeldaBullet: function(bullet) {
+
+    //  Called if the bullet goes out of the screen
+    this.zeldaBullet.kill();
+  },
 
   update: function() {
     //plaer movement
@@ -116,9 +152,10 @@ TopDownGame.Game.prototype = {
     else if(this.cursors.right.isDown) {
       this.player.body.velocity.x +=50;
       this.player.animations.play('right');
-    } else {
+    } else if (this.fireButton.isDown) {
+      this.fireBullet();
+    }else {
       this.player.animations.stop();
-      this.player.frame = 0;
     }
 
     //collission
