@@ -103,25 +103,25 @@ TopDownGame.Game.prototype = {
       if (this.zeldaBullet) {
           //  And fire it
           if (this.player.facing == "right") {
-            this.zeldaBullet.reset(this.player.x + 25, this.player.y + 21);
+            this.zeldaBullets.callAllExists('play', false, 'right');
+            this.zeldaBullet.reset(this.player.x + 30, this.player.y + 30);
             this.zeldaBullet.body.velocity.x = 200;
             this.zeldaBulletTime = this.game.time.now + 200;
-            this.zeldaBullets.callAll('play', null, 'right');
           } else if (this.player.facing == "up") {
+            this.zeldaBullets.callAllExists('play', false, 'up');
             this.zeldaBullet.reset(this.player.x + 16, this.player.y + 8);
             this.zeldaBullet.body.velocity.y = -200;
             this.zeldaBulletTime = this.game.time.now + 200;
-            this.zeldaBullets.callAll('play', null, 'up');
           } else if (this.player.facing == "left") {
+            this.zeldaBullets.callAllExists('play', false, 'left');
             this.zeldaBullet.reset(this.player.x + 5, this.player.y + 21);
             this.zeldaBullet.body.velocity.x = -200;
             this.zeldaBulletTime = this.game.time.now + 200;
-            this.zeldaBullets.callAll('play', null, 'left');
           } else if (this.player.facing == "down") {
+            this.zeldaBullets.callAllExists('play', false, 'down');
             this.zeldaBullet.reset(this.player.x + 15, this.player.y + 35);
             this.zeldaBullet.body.velocity.y = 200;
             this.zeldaBulletTime = this.game.time.now + 200;
-            this.zeldaBullets.callAll('play', null, 'down');
           }
       }
 
