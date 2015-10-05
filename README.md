@@ -1,6 +1,6 @@
 # Aldez - game.
 
-##### A website that allows users to post questions and get replies by other experts. (9/23/15 - 9/24/15)
+##### Group project for Javascript and Angular.
 
 #### By Phillip Shannon, Chris Swan, Alex Costa, & Ike Mattice
 
