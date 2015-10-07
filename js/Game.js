@@ -214,15 +214,6 @@ setupChicken: function(chicken) {
     collectable.destroy();
   },
 
-<<<<<<< HEAD
-  collisionHandler: function(zeldaBullet, goon) {
-
-    this.zeldaBullet.kill();
-    this.goon.kill();
-    //  And create an explosion :)
-    this.explosion = this.explosions.getFirstExists(false);
-    this.explosion.reset(this.goon.body.x, this.goon.body.y);
-=======
   chickenKiller: function(zeldaBullet, chicken) {
 
     this.zeldaBullet.kill();
@@ -230,7 +221,6 @@ setupChicken: function(chicken) {
     //  And create an explosion :)
     this.explosion = this.explosions.getFirstExists(false);
     this.explosion.reset(this.chicken.body.x, this.chicken.body.y);
->>>>>>> shannonphillipl/master
     this.explosion.play('kaboom', 30, false, true);
   },
 
