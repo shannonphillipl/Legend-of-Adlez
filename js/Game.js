@@ -28,11 +28,13 @@ TopDownGame.Game.prototype = {
     this.createExplosions();
 
     //create player
-    var result = this.findObjectsByType('playerStart', this.map, 'objectsLayer')
+    var result = this.findObjectsByType('playerStart', this.map, 'objectsLayer');
+
 
     //we know there is just one result
     this.player = this.game.add.sprite(result[0].x, result[0].y, 'player');
     this.game.physics.arcade.enable(this.player);
+    this.player.health = 5;
 
     //the camera follows player
     this.game.camera.follow(this.player);
@@ -124,8 +126,8 @@ TopDownGame.Game.prototype = {
     //Add random movement function
     this.tween = this.game.add.tween(this.goons).to( { y: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
   },
-//create chicken:
-setupChicken: function(chicken) {
+  //create chicken:
+  setupChicken: function(chicken) {
     this.chicken.anchor.x = 0.5;
     this.chicken.anchor.y = 0.5;
     this.chicken.animations.add('kaboom');
@@ -236,6 +238,23 @@ setupChicken: function(chicken) {
     }
   },
 
+  zeldaKiller: function(player, goon) {
+    this.player.health -=1;
+    this.xdirection = this.player.body.x - this.goon.body.x;
+    this.ydirection = this.goon.body.y - this.player.body.y;
+    this.xbounceVelocity = this.xdirection * 30;
+    this.ybounceVelocity = this.ydirection * -30;
+      this.player.body.velocity.y = this.ybounceVelocity;
+
+      this.player.body.velocity.x = this.xbounceVelocity;
+    if(this.player.health <=0) {
+      this.player.kill();
+      this.explosion = this.explosions.getFirstExists(false);
+      this.explosion.reset(this.player.body.x, this.player.body.y);
+      this.explosion.play('kaboom', 30, false, true);
+    }
+  },
+
   enterDoor: function(player, door) {
     console.log('entering door that will take you to '+door.targetTilemap+' on x:'+door.targetX+' and y:'+door.targetY);
   },
@@ -279,6 +298,7 @@ setupChicken: function(chicken) {
     this.game.physics.arcade.overlap(this.player, this.doors, this.enterDoor, null, this);
     this.game.physics.arcade.overlap(this.zeldaBullet, this.goon, this.goonKiller, null, this);
     this.game.physics.arcade.overlap(this.zeldaBullet, this.chicken, this.chickenKiller, null, this);
+    this.game.physics.arcade.overlap(this.player, this.goon, this.zeldaKiller, null, this);
 
   },
 
