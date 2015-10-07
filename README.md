@@ -1,4 +1,4 @@
-# Aldez - game.
+# The Legend of Adlez
 
 ##### Group project for Javascript and Angular.
 
