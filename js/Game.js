@@ -120,6 +120,7 @@ TopDownGame.Game.prototype = {
     this.goons.x = 250;
     this.goons.y = 100;
 
+    //Add random movement function
     this.tween = this.game.add.tween(this.goons).to( { y: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
   },
 //create chicken:
@@ -213,7 +214,27 @@ setupChicken: function(chicken) {
     collectable.destroy();
   },
 
+<<<<<<< HEAD
   collisionHandler: function(zeldaBullet, goon) {
+
+    this.zeldaBullet.kill();
+    this.goon.kill();
+    //  And create an explosion :)
+    this.explosion = this.explosions.getFirstExists(false);
+    this.explosion.reset(this.goon.body.x, this.goon.body.y);
+=======
+  chickenKiller: function(zeldaBullet, chicken) {
+
+    this.zeldaBullet.kill();
+    this.chicken.kill();
+    //  And create an explosion :)
+    this.explosion = this.explosions.getFirstExists(false);
+    this.explosion.reset(this.chicken.body.x, this.chicken.body.y);
+>>>>>>> shannonphillipl/master
+    this.explosion.play('kaboom', 30, false, true);
+  },
+
+  goonKiller: function(zeldaBullet, goon) {
 
     this.zeldaBullet.kill();
     this.goon.kill();
@@ -264,8 +285,8 @@ setupChicken: function(chicken) {
     this.game.physics.arcade.collide(this.player, this.blockedLayer);
     this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
     this.game.physics.arcade.overlap(this.player, this.doors, this.enterDoor, null, this);
-    this.game.physics.arcade.overlap(this.zeldaBullet, this.goon, this.collisionHandler, null, this);
-    this.game.physics.arcade.overlap(this.zeldaBullet, this.chicken, this.collisionHandler, null, this);
+    this.game.physics.arcade.overlap(this.zeldaBullet, this.goon, this.goonKiller, null, this);
+    this.game.physics.arcade.overlap(this.zeldaBullet, this.chicken, this.chickenKiller, null, this);
 
   },
 
