@@ -39,7 +39,7 @@ TopDownGame.Game.prototype = {
 
     //add non-player spritesheets
     this.zeldaBullet = this.game.add.sprite('zeldaBullet');
-    this.goons = this.game.add.sprite('goon');
+    this.goons = this.game.add.sprite('goonDown');
     this.chickens = this.game.add.sprite('chicken')
 
 
@@ -111,12 +111,12 @@ TopDownGame.Game.prototype = {
     this.goons.enableBody = true;
     this.goons.physicsBodyType = Phaser.Physics.ARCADE;
 
-    this.goon = this.goons.create(48, 50, 'goon');
+    this.goon = this.goons.create(48, 50, 'goonDown');
     this.goon.health = 5;
     this.goon.anchor.setTo(0.5, 0.5);
-    this.goon.animations.add('down', [0, 1, 2, 3], 20, true);
-    this.goon.play('down');
-    this.goon.body.moves = false;
+    this.goon.animations.add('goonDown', [0, 1, 2, 3], 20, true);
+    this.goon.play('goonDown');
+    this.goon.body.moves = true;
 
     this.goons.x = 250;
     this.goons.y = 100;
