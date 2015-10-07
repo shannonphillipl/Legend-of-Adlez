@@ -5,32 +5,40 @@ TopDownGame.Game = function(){};
 
 TopDownGame.Game.prototype = {
   create: function() {
-    this.map = this.game.add.tilemap('level1');
+    this.map = this.game.add.tilemap('world_map');
 
     //First argument: the tileset name as specified in Tiled; Second argument: the key to the asset
-    this.map.addTilesetImage('tiles', 'gameTiles');
+    this.map.addTilesetImage('tileset', 'tileset');
 
     //Create layer
-    this.backgroundlayer = this.map.createLayer('backgroundLayer');
-    this.blockedLayer = this.map.createLayer('blockedLayer');
+    this.blockedLayer = this.map.createLayer('waterLayer');
+    this.backgroundlayer = this.map.createLayer('groundLayer1');
+    this.backgroundlayer = this.map.createLayer('groundLayer2');
+    this.backgroundlayer = this.map.createLayer('groundLayer3');
+    this.backgroundlayer = this.map.createLayer('pathLayer');
+    this.backgroundlayer = this.map.createLayer('pathLayer2');
+    this.backgroundlayer = this.map.createLayer('pathLayer3');
+    this.blockedLayer = this.map.createLayer('CANTGOHERE');
+    this.backgroundlayer = this.map.createLayer('topLayer');
+    this.backgroundlayer = this.map.createLayer('topLayer2');
+    this.backgroundlayer = this.map.createLayer('topLayer3');
 
     //Collision on blocked layer. 2000 is the number of bricks we can collide into - this is found in the json file for the map
-    this.map.setCollisionBetween(1, 2000, true, 'blockedLayer');
+    this.map.setCollisionBetween(1, 20000, true, 'waterLayer');
+    this.map.setCollisionBetween(1, 20000, true, 'CANTGOHERE');
+
 
     //Resizes game world to match the layer dimensions
     this.backgroundlayer.resizeWorld();
 
     this.createItems();
-    this.createDoors();
     this.createZeldaBullets();
     this.createGoons();
     this.createChickens();
     this.createExplosions();
 
     //create player
-    var result = this.findObjectsByType('playerStart', this.map, 'objectsLayer');
-
-
+    var result = this.findObjectsByType('playerStart', this.map, 'objectLayer');
     //we know there is just one result
     this.player = this.game.add.sprite(result[0].x, result[0].y, 'player');
     this.game.physics.arcade.enable(this.player);
@@ -67,7 +75,7 @@ TopDownGame.Game.prototype = {
     this.items = this.game.add.group();
     this.items.enableBody = true;
     var item;
-    result = this.findObjectsByType('item', this.map, 'objectsLayer');
+    result = this.findObjectsByType('item', this.map, 'objectLayer');
     result.forEach(function(element) {
       this.createFromTiledObject(element, this.items);
     }, this);
@@ -84,15 +92,15 @@ TopDownGame.Game.prototype = {
     this.zeldaBullets.setAll('checkWorldBounds', true);
   },
 
-  createDoors: function() {
-    this.doors = this.game.add.group();
-    this.doors.enableBody = true;
-    this.result = this.findObjectsByType('door', this.map, 'objectsLayer');
-
-    this.result.forEach(function(element) {
-      this.createFromTiledObject(element, this.doors);
-    }, this);
-  },
+  // createDoors: function() {
+  //   this.doors = this.game.add.group();
+  //   this.doors.enableBody = true;
+  //   this.result = this.findObjectsByType('door', this.map, 'objectLayer');
+  //
+  //   this.result.forEach(function(element) {
+  //     this.createFromTiledObject(element, this.doors);
+  //   }, this);
+  // },
 
   createExplosions: function() {
 
@@ -258,9 +266,9 @@ TopDownGame.Game.prototype = {
     }
   },
 
-  enterDoor: function(player, door) {
-    console.log('entering door that will take you to '+door.targetTilemap+' on x:'+door.targetX+' and y:'+door.targetY);
-  },
+  // enterDoor: function(player, door) {
+  //   console.log('entering door that will take you to '+door.targetTilemap+' on x:'+door.targetX+' and y:'+door.targetY);
+  // },
 
   resetZeldaBullet: function(bullet) {
 
@@ -295,7 +303,7 @@ TopDownGame.Game.prototype = {
       this.player.animations.stop();
     }
 
-    //collission
+    //collision
     this.game.physics.arcade.collide(this.player, this.blockedLayer);
     this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
     this.game.physics.arcade.overlap(this.player, this.doors, this.enterDoor, null, this);
