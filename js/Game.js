@@ -24,6 +24,7 @@ TopDownGame.Game.prototype = {
     this.createDoors();
     this.createZeldaBullets();
     this.createGoons();
+    this.createChickens();
     this.createExplosions();
 
     //create player
@@ -39,6 +40,7 @@ TopDownGame.Game.prototype = {
     //add non-player spritesheets
     this.zeldaBullet = this.game.add.sprite('zeldaBullet');
     this.goons = this.game.add.sprite('goon');
+    this.chickens = this.game.add.sprite('chicken')
 
 
     //move player with cursor keys
@@ -95,6 +97,7 @@ TopDownGame.Game.prototype = {
     this.explosions = this.game.add.group();
     this.explosions.createMultiple(30, 'kaboom');
     this.explosions.forEach(this.setupGoon, this);
+    this.explosions.forEach(this.setupChicken, this);
   },
 
   setupGoon: function(goon) {
@@ -118,6 +121,29 @@ TopDownGame.Game.prototype = {
     this.goons.y = 100;
 
     this.tween = this.game.add.tween(this.goons).to( { y: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+  },
+//create chicken:
+setupChicken: function(chicken) {
+    this.chicken.anchor.x = 0.5;
+    this.chicken.anchor.y = 0.5;
+    this.chicken.animations.add('kaboom');
+  },
+
+  createChickens: function() {
+    this.chickens = this.game.add.group();
+    this.chickens.enableBody = true;
+    this.chickens.physicsBodyType = Phaser.Physics.ARCADE;
+
+    this.chicken = this.chickens.create(48, 50, 'chicken');
+    this.chicken.anchor.setTo(0.5, 0.5);
+    this.chicken.animations.add('rightSide', [3, 4, 5, 6], 7, true);
+    this.chicken.play('rightSide');
+    this.chicken.body.moves = false;
+
+    this.chicken.x = 250;
+    this.chicken.y = 100;
+
+    this.tween = this.game.add.tween(this.chickens).to( { x: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
   },
 
 
@@ -187,13 +213,15 @@ TopDownGame.Game.prototype = {
     collectable.destroy();
   },
 
-  collisionHandler: function(zeldaBullet, goon) {
+  collisionHandler: function(zeldaBullet, goon, chicken) {
 
     this.zeldaBullet.kill();
     this.goon.kill();
+    this.chicken.kill();
     //  And create an explosion :)
     this.explosion = this.explosions.getFirstExists(false);
     this.explosion.reset(this.goon.body.x, this.goon.body.y);
+    this.explosion.reset(this.chicken.body.x, this.chicken.body.y);
     this.explosion.play('kaboom', 30, false, true);
   },
 
@@ -239,6 +267,7 @@ TopDownGame.Game.prototype = {
     this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
     this.game.physics.arcade.overlap(this.player, this.doors, this.enterDoor, null, this);
     this.game.physics.arcade.overlap(this.zeldaBullet, this.goon, this.collisionHandler, null, this);
+    this.game.physics.arcade.overlap(this.zeldaBullet, this.chicken, this.collisionHandler, null, this);
 
   },
 
