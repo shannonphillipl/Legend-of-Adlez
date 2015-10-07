@@ -112,6 +112,7 @@ TopDownGame.Game.prototype = {
     this.goons.physicsBodyType = Phaser.Physics.ARCADE;
 
     this.goon = this.goons.create(48, 50, 'goon');
+    this.goon.health = 5;
     this.goon.anchor.setTo(0.5, 0.5);
     this.goon.animations.add('down', [0, 1, 2, 3], 20, true);
     this.goon.play('down');
@@ -225,13 +226,14 @@ setupChicken: function(chicken) {
   },
 
   goonKiller: function(zeldaBullet, goon) {
-
+    this.goon.health -=1;
     this.zeldaBullet.kill();
-    this.goon.kill();
-    //  And create an explosion :)
-    this.explosion = this.explosions.getFirstExists(false);
-    this.explosion.reset(this.goon.body.x, this.goon.body.y);
-    this.explosion.play('kaboom', 30, false, true);
+    if(this.goon.health <= 0){
+      this.goon.kill();
+      this.explosion = this.explosions.getFirstExists(false);
+      this.explosion.reset(this.goon.body.x, this.goon.body.y);
+      this.explosion.play('kaboom', 30, false, true);
+    }
   },
 
   enterDoor: function(player, door) {
