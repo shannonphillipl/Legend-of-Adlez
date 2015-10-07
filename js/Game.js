@@ -117,7 +117,9 @@ TopDownGame.Game.prototype = {
     this.goons.x = 250;
     this.goons.y = 100;
 
-    this.tween = this.game.add.tween(this.goons).to( { y: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+    //Add random movement function
+    game.time.events.repeat(Phaser.Timer.SECOND * 3, 10, moveGoon(), game);
+
   },
 
 
