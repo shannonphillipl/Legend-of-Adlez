@@ -240,13 +240,16 @@ TopDownGame.Game.prototype = {
 
   zeldaKiller: function(player, goon) {
     this.player.health -=1;
+
+    //The player should bounce back from the goon
     this.xdirection = this.player.body.x - this.goon.body.x;
     this.ydirection = this.goon.body.y - this.player.body.y;
     this.xbounceVelocity = this.xdirection * 30;
     this.ybounceVelocity = this.ydirection * -30;
-      this.player.body.velocity.y = this.ybounceVelocity;
+    this.player.body.velocity.y = this.ybounceVelocity;
+    this.player.body.velocity.x = this.xbounceVelocity;
 
-      this.player.body.velocity.x = this.xbounceVelocity;
+    //If the player dies:
     if(this.player.health <=0) {
       this.player.kill();
       this.explosion = this.explosions.getFirstExists(false);
