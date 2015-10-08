@@ -3,9 +3,20 @@ var TopDownGame = TopDownGame || {};
 //title screen
 TopDownGame.Game = function(){};
 
+var music;
+var adlezSpellSound;
+
 TopDownGame.Game.prototype = {
   create: function() {
     this.map = this.game.add.tilemap('world_map');
+
+    //Add music
+    music = this.add.audio('adlezSong');
+    music.play();
+
+    //Add music
+     music = this.sound.play('adlezSong');
+
 
     //First argument: the tileset name as specified in Tiled; Second argument: the key to the asset
     this.map.addTilesetImage('tileset', 'gameTiles');
@@ -15,40 +26,52 @@ TopDownGame.Game.prototype = {
     this.backgroundlayer = this.map.createLayer('groundLayer1');
     this.backgroundlayer = this.map.createLayer('groundLayer2');
     this.backgroundlayer = this.map.createLayer('groundLayer3');
-    this.backgroundlayer = this.map.createLayer('pathLayer');
+    this.backgroundlayer = this.map.createLayer('pathLayer1');
     this.backgroundlayer = this.map.createLayer('pathLayer2');
-    // this.backgroundlayer = this.map.createLayer('pathLayer3');
     this.blockedLayer = this.map.createLayer('CANTGOHERE');
+    this.text;
+
+    
+
     // this.backgroundlayer = this.map.createLayer('topLayer');
     // this.backgroundlayer = this.map.createLayer('topLayer2');
     // this.backgroundlayer = this.map.createLayer('topLayer3');
 
     //Collision on blocked layer. 2000 is the number of bricks we can collide into - this is found in the json file for the map
     this.map.setCollisionBetween(1, 20000, true, 'waterLayer');
-    this.map.setCollisionBetween(1, 20000, true, 'CANTGOHERE');
+    this.map.setCollisionBetween(1, 2000, true, 'CANTGOHERE');
 
     //Resizes game world to match the layer dimensions
     this.backgroundlayer.resizeWorld();
 
     this.createItems();
-    this.createDoors();
     this.createZeldaBullets();
     this.createGoons();
+    this.createChickens();
     this.createExplosions();
 
     //create player
-    var result = this.findObjectsByType('playerStart', this.map, 'objectsLayer')
+    var result = this.findObjectsByType('playerStart', this.map, 'playerStart');
+
 
     //we know there is just one result
     this.player = this.game.add.sprite(result[0].x, result[0].y, 'player');
     this.game.physics.arcade.enable(this.player);
+    this.player.health = 5;
+
+    this.text = this.game.add.text(this.game.camera.x, this.game.camera.y, "Health: " + this.player.health, {
+      font: "24px Arial",
+      fill: "#ff0044",
+      align: "center"
+    });
 
     //the camera follows player
     this.game.camera.follow(this.player);
 
     //add non-player spritesheets
     this.zeldaBullet = this.game.add.sprite('zeldaBullet');
-    this.goons = this.game.add.sprite('goon');
+    this.goons = this.game.add.sprite('goonDown');
+    this.chickens = this.game.add.sprite('chicken')
 
 
     //move player with cursor keys
@@ -70,13 +93,13 @@ TopDownGame.Game.prototype = {
   },
   createItems: function() {
     //create items
-    this.items = this.game.add.group();
-    this.items.enableBody = true;
-    var item;
-    result = this.findObjectsByType('item', this.map, 'objectsLayer');
-    result.forEach(function(element) {
-      this.createFromTiledObject(element, this.items);
-    }, this);
+    // this.items = this.game.add.group();
+    // this.items.enableBody = true;
+    // var item;
+    // result = this.findObjectsByType('item', this.map, 'objectsLayer');
+    // result.forEach(function(element) {
+    //   this.createFromTiledObject(element, this.items);
+    // }, this);
   },
 
   createZeldaBullets: function() {
@@ -90,21 +113,12 @@ TopDownGame.Game.prototype = {
     this.zeldaBullets.setAll('checkWorldBounds', true);
   },
 
-  createDoors: function() {
-    this.doors = this.game.add.group();
-    this.doors.enableBody = true;
-    this.result = this.findObjectsByType('door', this.map, 'objectsLayer');
-
-    this.result.forEach(function(element) {
-      this.createFromTiledObject(element, this.doors);
-    }, this);
-  },
-
   createExplosions: function() {
 
     this.explosions = this.game.add.group();
     this.explosions.createMultiple(30, 'kaboom');
     this.explosions.forEach(this.setupGoon, this);
+    this.explosions.forEach(this.setupChicken, this);
   },
 
   setupGoon: function(goon) {
@@ -118,16 +132,41 @@ TopDownGame.Game.prototype = {
     this.goons.enableBody = true;
     this.goons.physicsBodyType = Phaser.Physics.ARCADE;
 
-    this.goon = this.goons.create(48, 50, 'goon');
+    this.goon = this.goons.create(48, 50, 'goonDown');
+    this.goon.health = 5;
     this.goon.anchor.setTo(0.5, 0.5);
-    this.goon.animations.add('down', [0, 1, 2, 3], 20, true);
-    this.goon.play('down');
-    this.goon.body.moves = false;
+    this.goon.animations.add('goonDown', [0, 1, 2, 3], 20, true);
+    this.goon.play('goonDown');
+    this.goon.body.moves = true;
 
     this.goons.x = 250;
     this.goons.y = 100;
 
+    //Add random movement function
     this.tween = this.game.add.tween(this.goons).to( { y: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+  },
+  //create chicken:
+  setupChicken: function(chicken) {
+    this.chicken.anchor.x = 0.5;
+    this.chicken.anchor.y = 0.5;
+    this.chicken.animations.add('kaboom');
+  },
+
+  createChickens: function() {
+    this.chickens = this.game.add.group();
+    this.chickens.enableBody = true;
+    this.chickens.physicsBodyType = Phaser.Physics.ARCADE;
+
+    this.chicken = this.chickens.create(48, 50, 'chicken');
+    this.chicken.anchor.setTo(0.5, 0.5);
+    this.chicken.animations.add('right', [3, 4, 5, 6], 7, true);
+    this.chicken.play('right');
+    this.chicken.body.moves = false;
+
+    this.chicken.x = 50;
+    this.chicken.y = 100;
+
+    this.tween = this.game.add.tween(this.chickens).to( { x: 100 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
   },
 
 
@@ -146,6 +185,8 @@ TopDownGame.Game.prototype = {
 
   //fire bullet
   fireBullet: function() {
+      //add sound to Adlez's spell
+      adlezSpellSound = this.sound.play('adlezSpell');
 
     if (this.game.time.now > this.zeldaBulletTime) {
       //  Grab the first bullet we can from the pool
@@ -197,14 +238,43 @@ TopDownGame.Game.prototype = {
     collectable.destroy();
   },
 
-  collisionHandler: function(zeldaBullet, goon) {
+  chickenKiller: function(zeldaBullet, chicken) {
 
     this.zeldaBullet.kill();
-    this.goon.kill();
+    this.chicken.kill();
     //  And create an explosion :)
     this.explosion = this.explosions.getFirstExists(false);
-    this.explosion.reset(this.goon.body.x, this.goon.body.y);
+    this.explosion.reset(this.chicken.body.x, this.chicken.body.y);
     this.explosion.play('kaboom', 30, false, true);
+  },
+
+  goonKiller: function(zeldaBullet, goon) {
+    this.goon.health -=1;
+    this.zeldaBullet.kill();
+    if(this.goon.health <= 0){
+      this.goon.kill();
+      this.explosion = this.explosions.getFirstExists(false);
+      this.explosion.reset(this.goon.body.x, this.goon.body.y);
+      this.explosion.play('kaboom', 30, false, true);
+    }
+  },
+
+  zeldaKiller: function(player, goon) {
+    this.player.health -=1;
+    this.xdirection = this.player.body.x - this.goon.body.x;
+    this.ydirection = this.goon.body.y - this.player.body.y;
+    this.xbounceVelocity = this.xdirection * 30;
+    this.ybounceVelocity = this.ydirection * -30;
+      this.player.body.velocity.y = this.ybounceVelocity;
+
+      this.player.body.velocity.x = this.xbounceVelocity;
+    if(this.player.health <=0) {
+      this.player.kill();
+      this.explosion = this.explosions.getFirstExists(false);
+      this.explosion.reset(this.player.body.x, this.player.body.y);
+      this.explosion.play('kaboom', 30, false, true);
+    }
+    this.updateText();
   },
 
   enterDoor: function(player, door) {
@@ -217,38 +287,51 @@ TopDownGame.Game.prototype = {
     this.zeldaBullet.kill();
   },
 
+  updateText: function() {
+    text.setText("Health:" + this.player.health);
+  },
+
   update: function() {
     //plaer movement
     this.player.body.velocity.y = 0;
     this.player.body.velocity.x = 0;
+    this.text.x = this.game.camera.x;
+    this.text.y = this.game.camera.y;
 
     if(this.cursors.up.isDown) {
       this.player.facing = "up";
       this.player.body.velocity.y -= 50;
       this.player.animations.play('up');
+      this.sound.play('adlezStep');
     } else if(this.cursors.down.isDown) {
       this.player.facing = "down";
       this.player.body.velocity.y +=50;
       this.player.animations.play('down');
+      this.sound.play('adlezStep');
     } else if(this.cursors.left.isDown) {
       this.player.facing = "left";
       this.player.body.velocity.x -= 50;
       this.player.animations.play('left');
+      this.sound.play('adlezStep');
     } else if(this.cursors.right.isDown) {
       this.player.facing = "right";
       this.player.body.velocity.x +=50;
       this.player.animations.play('right');
+      this.sound.play('adlezStep');
     } else if (this.fireButton.isDown) {
       this.fireBullet();
     }else {
       this.player.animations.stop();
     }
 
+
     //collission
     this.game.physics.arcade.collide(this.player, this.blockedLayer);
     this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
     this.game.physics.arcade.overlap(this.player, this.doors, this.enterDoor, null, this);
-    this.game.physics.arcade.overlap(this.zeldaBullet, this.goon, this.collisionHandler, null, this);
+    this.game.physics.arcade.overlap(this.zeldaBullet, this.goon, this.goonKiller, null, this);
+    this.game.physics.arcade.overlap(this.zeldaBullet, this.chicken, this.chickenKiller, null, this);
+    this.game.physics.arcade.overlap(this.player, this.goon, this.zeldaKiller, null, this);
 
   },
 
