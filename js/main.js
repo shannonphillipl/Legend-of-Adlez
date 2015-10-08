@@ -7,3 +7,9 @@ TopDownGame.game.state.add('Preload', TopDownGame.Preload);
 TopDownGame.game.state.add('Game', TopDownGame.Game);
 
 TopDownGame.game.state.start('Boot');
+
+//Utilities:
+function randomIntFromInterval(min,max)
+{
+    return Math.floor(Math.random()*(max-min+1)+min);
+}
