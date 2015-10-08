@@ -312,22 +312,22 @@ TopDownGame.Game.prototype = {
 
     if(this.cursors.up.isDown) {
       this.player.facing = "up";
-      this.player.body.velocity.y -= 50;
+      this.player.body.velocity.y -= 175;
       this.player.animations.play('up');
 
     } else if(this.cursors.down.isDown) {
       this.player.facing = "down";
-      this.player.body.velocity.y +=50;
+      this.player.body.velocity.y +=175;
       this.player.animations.play('down');
 
     } else if(this.cursors.left.isDown) {
       this.player.facing = "left";
-      this.player.body.velocity.x -= 50;
+      this.player.body.velocity.x -= 175;
       this.player.animations.play('left');
 
     } else if(this.cursors.right.isDown) {
       this.player.facing = "right";
-      this.player.body.velocity.x +=50;
+      this.player.body.velocity.x +=175;
       this.player.animations.play('right');
 
     } else if (this.fireButton.isDown) {
