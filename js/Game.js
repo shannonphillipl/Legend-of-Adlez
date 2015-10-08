@@ -33,13 +33,12 @@ TopDownGame.Game.prototype = {
 
 
     //Collision on blocked layer. 2000 is the number of bricks we can collide into - this is found in the json file for the map
-    this.map.setCollisionBetween(1, 20000, true, 'waterLayer');
+    this.map.setCollisionBetween(1, 2000, true, 'waterLayer');
     this.map.setCollisionBetween(1, 2000, true, 'CANTGOHERE');
 
     //Resizes game world to match the layer dimensions
     this.backgroundlayer.resizeWorld();
 
-    this.createItems();
     this.createZeldaBullets();
     this.createGoons();
     this.createExplosions();
@@ -109,17 +108,21 @@ TopDownGame.Game.prototype = {
       this.chicken.key = key;
       this.tween = this.game.add.tween(this.chicken).to( { x: this.chicken.x+randomIntFromInterval(80,100) }, randomIntFromInterval(400,11000), Phaser.Easing.Linear.None, true, 0, 1000, true);
     }, this);
-  },
 
-  createItems: function() {
-    //create items
-    // this.items = this.game.add.group();
-    // this.items.enableBody = true;
-    // var item;
-    // result = this.findObjectsByType('item', this.map, 'objectsLayer');
-    // result.forEach(function(element) {
-    //   this.createFromTiledObject(element, this.items);
-    // }, this);
+    result = this.findObjectsByType('goon', this.map, 'basicEnemyLayer');
+    result.forEach(function(element) {
+      var key = "goon" + String(element.id);
+      this.goon = this.enemies.create(element.x, element.y, 'goon');
+      this.goon.anchor.setTo(0.5, 0.5);
+      this.goon.animations.add('right', [3, 4, 5, 6], 7, true);
+      this.goon.play('right');
+      this.goon.body.moves = false;
+      this.goon.anchor.x = 0.5;
+      this.goon.anchor.y = 0.5;
+      this.goon.health = 5;
+      this.goon.key = key;
+      this.tween = this.game.add.tween(this.goon).to( { x: this.goon.x+randomIntFromInterval(80,100) }, randomIntFromInterval(400,11000), Phaser.Easing.Linear.None, true, 0, 1000, true);
+    }, this);
   },
 
   createZeldaBullets: function() {
@@ -155,24 +158,6 @@ TopDownGame.Game.prototype = {
 
     //Add random movement function
     this.tween = this.game.add.tween(this.goons).to( { y: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
-  },
-
-
-  createChickens: function() {
-    this.chickens = this.game.add.group();
-    this.chickens.enableBody = true;
-    this.chickens.physicsBodyType = Phaser.Physics.ARCADE;
-
-    this.chicken = this.chickens.create(48, 50, 'chicken');
-    this.chicken.anchor.setTo(0.5, 0.5);
-    this.chicken.animations.add('right', [3, 4, 5, 6], 7, true);
-    this.chicken.play('right');
-    this.chicken.body.moves = false;
-
-    this.chicken.x = 50;
-    this.chicken.y = 100;
-
-    this.tween = this.game.add.tween(this.chickens).to( { x: 100 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
   },
 
 
@@ -238,16 +223,7 @@ TopDownGame.Game.prototype = {
       });
   },
 
-
-  //Collecting items
-  collect: function(player, collectable) {
-    console.log('yummy!');
-    //remove sprite
-    collectable.destroy();
-  },
-
   chickenKiller: function(zeldaBullet, chicken) {
-
     this.zeldaBullet.kill();
     chicken.kill();
     //  And create an explosion :)
