@@ -35,6 +35,7 @@ TopDownGame.Game.prototype = {
     this.createGoons();
     this.createChickens();
     this.createExplosions();
+    this.createEnemies();
 
     //adding in healthbar:
     // this.healthbar = game.add.graphics(0,0);
@@ -56,7 +57,7 @@ TopDownGame.Game.prototype = {
     //add non-player spritesheets
     this.zeldaBullet = this.game.add.sprite('zeldaBullet');
     this.goons = this.game.add.sprite('goonDown');
-    this.chickens = this.game.add.sprite('chicken')
+    this.chickens = this.game.add.sprite('chicken');
 
 
     //move player with cursor keys
@@ -76,6 +77,18 @@ TopDownGame.Game.prototype = {
     this.zeldaBullets.callAll('animations.add', 'animations', 'up', [0, 1, 2, 3], 7, true);
     this.explosions.callAll('animations.add', 'animations', 'kaboom', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], 15, true);
   },
+
+  createEnemies: function() {
+    this.enemies = this.game.add.group();
+    this.enemies.enableBody = true;
+    var enemy;
+    result = this.findObjectsByType('chicken', this.map, 'basicEnemyLayer');
+    result.forEach(function(element) {
+      this.game.add.sprite(element.x, element.y, 'chicken');
+      this.chicken.animations.add('kaboom');
+    }, this);
+  },
+
   createItems: function() {
     //create items
     // this.items = this.game.add.group();
@@ -129,12 +142,6 @@ TopDownGame.Game.prototype = {
 
     //Add random movement function
     this.tween = this.game.add.tween(this.goons).to( { y: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
-  },
-  //create chicken:
-  setupChicken: function(chicken) {
-    this.chicken.anchor.x = 0.5;
-    this.chicken.anchor.y = 0.5;
-    this.chicken.animations.add('kaboom');
   },
 
   createChickens: function() {
