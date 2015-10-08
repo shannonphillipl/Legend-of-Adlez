@@ -25,6 +25,9 @@ TopDownGame.Preload.prototype = {
 
     this.load.audio('adlezSong', ['assets/audio/adlezSong.mp3', 'assets/audio/adlezSong.ogg']);
 
+    this.load.audio('adlezSpell', ['assets/audio/adlezSpell.mp3', 'assets/audio/adlezSpell.ogg']);
+    this.load.audio('adlezStep', ['assets/audio/adlezStep.mp3', 'assets/audio/adlezStep.ogg']);
+
   },
   create: function() {
     this.state.start('Game');
