@@ -3,9 +3,20 @@ var TopDownGame = TopDownGame || {};
 //title screen
 TopDownGame.Game = function(){};
 
+var music;
+var adlezSpellSound;
+
 TopDownGame.Game.prototype = {
   create: function() {
     this.map = this.game.add.tilemap('world_map');
+
+    //Add music
+    music = game.add.audio('adlezSong');
+    music.onDecoded.add(start, this);
+
+    //Add music
+     music = this.sound.play('adlezSong');
+
 
     //First argument: the tileset name as specified in Tiled; Second argument: the key to the asset
     this.map.addTilesetImage('tileset', 'gameTiles');
@@ -193,6 +204,8 @@ TopDownGame.Game.prototype = {
 
   //fire bullet
   fireBullet: function() {
+      //add sound to Adlez's spell
+      adlezSpellSound = this.sound.play('adlezSpell');
 
     if (this.game.time.now > this.zeldaBulletTime) {
       //  Grab the first bullet we can from the pool
@@ -301,18 +314,22 @@ TopDownGame.Game.prototype = {
       this.player.facing = "up";
       this.player.body.velocity.y -= 50;
       this.player.animations.play('up');
+      this.sound.play('adlezStep');
     } else if(this.cursors.down.isDown) {
       this.player.facing = "down";
       this.player.body.velocity.y +=50;
       this.player.animations.play('down');
+      this.sound.play('adlezStep');
     } else if(this.cursors.left.isDown) {
       this.player.facing = "left";
       this.player.body.velocity.x -= 50;
       this.player.animations.play('left');
+      this.sound.play('adlezStep');
     } else if(this.cursors.right.isDown) {
       this.player.facing = "right";
       this.player.body.velocity.x +=50;
       this.player.animations.play('right');
+      this.sound.play('adlezStep');
     } else if (this.fireButton.isDown) {
       this.fireBullet();
     }else {
