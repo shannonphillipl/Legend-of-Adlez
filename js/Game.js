@@ -10,12 +10,17 @@ TopDownGame.Game.prototype = {
   create: function() {
     this.map = this.game.add.tilemap('world_map');
 
+    // //Add music
+    // music = this.add.audio('adlezSong');
+    // music.play();
+    //
+    // //Add music
+    //  music = this.sound.play('adlezSong');
+    
     //Add music
-    music = this.add.audio('adlezSong');
-    music.play();
+      music = this.add.audio('adlezSong');
+      music.play();
 
-    //Add music
-     music = this.sound.play('adlezSong');
 
 
     //First argument: the tileset name as specified in Tiled; Second argument: the key to the asset
@@ -31,7 +36,7 @@ TopDownGame.Game.prototype = {
     this.blockedLayer = this.map.createLayer('CANTGOHERE');
     this.text;
 
-    
+
 
     // this.backgroundlayer = this.map.createLayer('topLayer');
     // this.backgroundlayer = this.map.createLayer('topLayer2');
