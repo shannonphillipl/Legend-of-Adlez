@@ -10,8 +10,8 @@ TopDownGame.Game.prototype = {
     this.map = this.game.add.tilemap('world_map');
 
     //Add music
-    music = game.add.audio('adlezSong');
-    music.onDecoded.add(start, this);
+    music = this.game.add.audio('adlezSong');
+    music.onDecoded.add(start. this);
 
     //Add music
 
