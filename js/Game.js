@@ -11,11 +11,11 @@ TopDownGame.Game.prototype = {
     this.map = this.game.add.tilemap('world_map');
 
     //Add music
-    music = this.add.audio('adlezSong');
-    music.play();
-
-    //Add music
-     music = this.sound.play('adlezSong');
+    // music = this.add.audio('adlezSong');
+    // music.play();
+    //
+    // //Add music
+    //  music = this.sound.play('adlezSong');
 
 
     //First argument: the tileset name as specified in Tiled; Second argument: the key to the asset
@@ -47,10 +47,10 @@ TopDownGame.Game.prototype = {
     this.createItems();
     this.createZeldaBullets();
     this.createGoons();
-    this.createChickens();
     this.createExplosions();
 
     this.createEnemies();
+
 
 
     //create player
@@ -102,6 +102,7 @@ TopDownGame.Game.prototype = {
     var enemy;
     result = this.findObjectsByType('chicken', this.map, 'basicEnemyLayer');
     result.forEach(function(element) {
+      var key = "chicken" + String(element.id);
       this.chicken = this.enemies.create(element.x, element.y, 'chicken');
       this.chicken.anchor.setTo(0.5, 0.5);
       this.chicken.animations.add('right', [3, 4, 5, 6], 7, true);
@@ -110,6 +111,7 @@ TopDownGame.Game.prototype = {
       this.chicken.anchor.x = 0.5;
       this.chicken.anchor.y = 0.5;
       this.chicken.health = 1;
+      this.chicken.key = key;
       this.tween = this.game.add.tween(this.chicken).to( { x: this.chicken.x+randomIntFromInterval(80,100) }, randomIntFromInterval(400,11000), Phaser.Easing.Linear.None, true, 0, 1000, true);
     }, this);
   },
@@ -137,17 +139,8 @@ TopDownGame.Game.prototype = {
   },
 
   createExplosions: function() {
-
     this.explosions = this.game.add.group();
     this.explosions.createMultiple(30, 'kaboom');
-    this.explosions.forEach(this.setupGoon, this);
-    this.explosions.forEach(this.setupChicken, this);
-  },
-
-  setupGoon: function(goon) {
-    this.goon.anchor.x = 0.5;
-    this.goon.anchor.y = 0.5;
-    this.goon.animations.add('kaboom');
   },
 
   createGoons: function() {
@@ -169,11 +162,6 @@ TopDownGame.Game.prototype = {
     this.tween = this.game.add.tween(this.goons).to( { y: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
   },
 
-  setupChicken: function(chicken) {
-    this.chicken.anchor.x = 0.5;
-    this.chicken.anchor.y = 0.5;
-    this.chicken.animations.add('kaboom');
-  },
 
   createChickens: function() {
     this.chickens = this.game.add.group();
@@ -265,10 +253,10 @@ TopDownGame.Game.prototype = {
   chickenKiller: function(zeldaBullet, chicken) {
 
     this.zeldaBullet.kill();
-    this.chicken.kill();
+    chicken.kill();
     //  And create an explosion :)
     this.explosion = this.explosions.getFirstExists(false);
-    this.explosion.reset(this.chicken.body.x, this.chicken.body.y);
+    this.explosion.reset(chicken.body.x, chicken.body.y);
     this.explosion.play('kaboom', 30, false, true);
   },
 
@@ -354,7 +342,7 @@ TopDownGame.Game.prototype = {
     this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
     this.game.physics.arcade.overlap(this.player, this.doors, this.enterDoor, null, this);
     this.game.physics.arcade.overlap(this.zeldaBullet, this.goon, this.goonKiller, null, this);
-    this.game.physics.arcade.overlap(this.zeldaBullet, this.chicken, this.chickenKiller, null, this);
+    this.game.physics.arcade.overlap(this.zeldaBullet, this.enemies.children, this.chickenKiller, null, this);
     this.game.physics.arcade.overlap(this.player, this.goon, this.zeldaKiller, null, this);
 
   },
