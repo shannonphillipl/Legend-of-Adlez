@@ -81,11 +81,19 @@ TopDownGame.Game.prototype = {
   createEnemies: function() {
     this.enemies = this.game.add.group();
     this.enemies.enableBody = true;
+    this.enemies.physicsBodyType = Phaser.Physics.ARCADE;
     var enemy;
     result = this.findObjectsByType('chicken', this.map, 'basicEnemyLayer');
     result.forEach(function(element) {
-      this.game.add.sprite(element.x, element.y, 'chicken');
-      this.chicken.animations.add('kaboom');
+      this.chicken = this.enemies.create(element.x, element.y, 'chicken');
+      this.chicken.anchor.setTo(0.5, 0.5);
+      this.chicken.animations.add('right', [3, 4, 5, 6], 7, true);
+      this.chicken.play('right');
+      this.chicken.body.moves = false;
+      this.chicken.anchor.x = 0.5;
+      this.chicken.anchor.y = 0.5;
+      this.chicken.health = 1;
+      this.tween = this.game.add.tween(this.chicken).to( { x: this.chicken.x+randomIntFromInterval(80,100) }, randomIntFromInterval(400,11000), Phaser.Easing.Linear.None, true, 0, 1000, true);
     }, this);
   },
 
@@ -144,6 +152,12 @@ TopDownGame.Game.prototype = {
     this.tween = this.game.add.tween(this.goons).to( { y: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
   },
 
+  setupChicken: function(chicken) {
+    this.chicken.anchor.x = 0.5;
+    this.chicken.anchor.y = 0.5;
+    this.chicken.animations.add('kaboom');
+  },
+
   createChickens: function() {
     this.chickens = this.game.add.group();
     this.chickens.enableBody = true;
@@ -162,12 +176,13 @@ TopDownGame.Game.prototype = {
   },
 
 
-  //find objects in a TIled layer that containt a property called "type" equal to a certain value
+  //find objects in a Tiled layer that containt a property called "type" equal to a certain value
   findObjectsByType: function(type, map, layer) {
     var result = new Array();
     map.objects[layer].forEach(function(element) {
       if(element.properties.type === type) {
         element.y -= map.tileHeight;
+        element.id = result.length + 1;
         result.push(element);
       }
     });
