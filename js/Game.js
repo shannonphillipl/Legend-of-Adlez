@@ -4,14 +4,15 @@ var TopDownGame = TopDownGame || {};
 TopDownGame.Game = function(){};
 
 var music;
+var adlezSpellSound;
 
 TopDownGame.Game.prototype = {
   create: function() {
     this.map = this.game.add.tilemap('level1');
 
     //Add music
-
      music = this.sound.play('adlezSong');
+
 
     //First argument: the tileset name as specified in Tiled; Second argument: the key to the asset
     this.map.addTilesetImage('tiles', 'gameTiles');
@@ -172,6 +173,8 @@ TopDownGame.Game.prototype = {
 
   //fire bullet
   fireBullet: function() {
+      //add sound to Adlez's spell
+      adlezSpellSound = this.sound.play('adlezSpell');
 
     if (this.game.time.now > this.zeldaBulletTime) {
       //  Grab the first bullet we can from the pool
