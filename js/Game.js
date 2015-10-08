@@ -17,11 +17,12 @@ TopDownGame.Game.prototype = {
     this.backgroundlayer = this.map.createLayer('groundLayer3');
     this.backgroundlayer = this.map.createLayer('pathLayer');
     this.backgroundlayer = this.map.createLayer('pathLayer2');
-    // this.backgroundlayer = this.map.createLayer('pathLayer3');
     this.blockedLayer = this.map.createLayer('CANTGOHERE');
-    // this.backgroundlayer = this.map.createLayer('topLayer');
-    // this.backgroundlayer = this.map.createLayer('topLayer2');
-    // this.backgroundlayer = this.map.createLayer('topLayer3');
+    this.backgroundlayer = this.map.createLayer('topLayer');
+    this.backgroundlayer = this.map.createLayer('topLayer2');
+    this.backgroundlayer = this.map.createLayer('topLayer3');
+    this.backgroundlayer = this.map.createLayer('topLayer4');
+
 
     //Collision on blocked layer. 2000 is the number of bricks we can collide into - this is found in the json file for the map
     this.map.setCollisionBetween(1, 20000, true, 'waterLayer');
