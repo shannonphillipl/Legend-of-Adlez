@@ -13,6 +13,10 @@ TopDownGame.Game.prototype = {
     music = game.add.audio('adlezSong');
     music.onDecoded.add(start, this);
 
+    //Add music
+
+     music = this.sound.play('adlezSong');
+
     //First argument: the tileset name as specified in Tiled; Second argument: the key to the asset
     this.map.addTilesetImage('tileset', 'gameTiles');
 
