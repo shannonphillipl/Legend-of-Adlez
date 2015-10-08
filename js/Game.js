@@ -28,18 +28,20 @@ TopDownGame.Game.prototype = {
     this.createExplosions();
 
     //create player
-    var result = this.findObjectsByType('playerStart', this.map, 'objectsLayer')
+    var result = this.findObjectsByType('playerStart', this.map, 'objectsLayer');
+
 
     //we know there is just one result
     this.player = this.game.add.sprite(result[0].x, result[0].y, 'player');
     this.game.physics.arcade.enable(this.player);
+    this.player.health = 5;
 
     //the camera follows player
     this.game.camera.follow(this.player);
 
     //add non-player spritesheets
     this.zeldaBullet = this.game.add.sprite('zeldaBullet');
-    this.goons = this.game.add.sprite('goon');
+    this.goons = this.game.add.sprite('goonDown');
     this.chickens = this.game.add.sprite('chicken')
 
 
@@ -111,11 +113,12 @@ TopDownGame.Game.prototype = {
     this.goons.enableBody = true;
     this.goons.physicsBodyType = Phaser.Physics.ARCADE;
 
-    this.goon = this.goons.create(48, 50, 'goon');
+    this.goon = this.goons.create(48, 50, 'goonDown');
+    this.goon.health = 5;
     this.goon.anchor.setTo(0.5, 0.5);
-    this.goon.animations.add('down', [0, 1, 2, 3], 20, true);
-    this.goon.play('down');
-    this.goon.body.moves = false;
+    this.goon.animations.add('goonDown', [0, 1, 2, 3], 20, true);
+    this.goon.play('goonDown');
+    this.goon.body.moves = true;
 
     this.goons.x = 250;
     this.goons.y = 100;
@@ -123,8 +126,8 @@ TopDownGame.Game.prototype = {
     //Add random movement function
     this.tween = this.game.add.tween(this.goons).to( { y: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
   },
-//create chicken:
-setupChicken: function(chicken) {
+  //create chicken:
+  setupChicken: function(chicken) {
     this.chicken.anchor.x = 0.5;
     this.chicken.anchor.y = 0.5;
     this.chicken.animations.add('kaboom');
@@ -225,13 +228,31 @@ setupChicken: function(chicken) {
   },
 
   goonKiller: function(zeldaBullet, goon) {
-
+    this.goon.health -=1;
     this.zeldaBullet.kill();
-    this.goon.kill();
-    //  And create an explosion :)
-    this.explosion = this.explosions.getFirstExists(false);
-    this.explosion.reset(this.goon.body.x, this.goon.body.y);
-    this.explosion.play('kaboom', 30, false, true);
+    if(this.goon.health <= 0){
+      this.goon.kill();
+      this.explosion = this.explosions.getFirstExists(false);
+      this.explosion.reset(this.goon.body.x, this.goon.body.y);
+      this.explosion.play('kaboom', 30, false, true);
+    }
+  },
+
+  zeldaKiller: function(player, goon) {
+    this.player.health -=1;
+    this.xdirection = this.player.body.x - this.goon.body.x;
+    this.ydirection = this.goon.body.y - this.player.body.y;
+    this.xbounceVelocity = this.xdirection * 30;
+    this.ybounceVelocity = this.ydirection * -30;
+      this.player.body.velocity.y = this.ybounceVelocity;
+
+      this.player.body.velocity.x = this.xbounceVelocity;
+    if(this.player.health <=0) {
+      this.player.kill();
+      this.explosion = this.explosions.getFirstExists(false);
+      this.explosion.reset(this.player.body.x, this.player.body.y);
+      this.explosion.play('kaboom', 30, false, true);
+    }
   },
 
   enterDoor: function(player, door) {
@@ -277,6 +298,7 @@ setupChicken: function(chicken) {
     this.game.physics.arcade.overlap(this.player, this.doors, this.enterDoor, null, this);
     this.game.physics.arcade.overlap(this.zeldaBullet, this.goon, this.goonKiller, null, this);
     this.game.physics.arcade.overlap(this.zeldaBullet, this.chicken, this.chickenKiller, null, this);
+    this.game.physics.arcade.overlap(this.player, this.goon, this.zeldaKiller, null, this);
 
   },
 
