@@ -137,14 +137,14 @@ setupChicken: function(chicken) {
 
     this.chicken = this.chickens.create(48, 50, 'chicken');
     this.chicken.anchor.setTo(0.5, 0.5);
-    this.chicken.animations.add('rightSide', [3, 4, 5, 6], 7, true);
-    this.chicken.play('rightSide');
+    this.chicken.animations.add('right', [3, 4, 5, 6], 7, true);
+    this.chicken.play('right');
     this.chicken.body.moves = false;
 
-    this.chicken.x = 250;
+    this.chicken.x = 50;
     this.chicken.y = 100;
 
-    this.tween = this.game.add.tween(this.chickens).to( { x: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+    this.tween = this.game.add.tween(this.chickens).to( { x: 100 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
   },
 
 
@@ -159,7 +159,7 @@ setupChicken: function(chicken) {
     });
     return result;
   },
-
+ 
 
   //fire bullet
   fireBullet: function() {

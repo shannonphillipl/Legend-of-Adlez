@@ -19,7 +19,7 @@ TopDownGame.Preload.prototype = {
     this.load.image('browndoor', 'assets/images/browndoor.png');
     this.load.spritesheet('zeldaBullet', 'assets/images/zeldaBullet.png', 32, 32);
     this.load.spritesheet('goon', 'assets/images/goon.png', 32, 32);
-    this.load.spritesheet('chicken', 'assets/images/chicken.png', 32, 32);
+    this.game.load.spritesheet('chicken', 'assets/images/chicken.png', 32, 32);
     this.game.load.spritesheet('kaboom', 'assets/images/explosion.png', 64, 64);
   },
   create: function() {
