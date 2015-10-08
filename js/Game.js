@@ -36,6 +36,7 @@ TopDownGame.Game.prototype = {
     this.createChickens();
     this.createExplosions();
     this.createEnemies();
+    debugger;
 
     //adding in healthbar:
     // this.healthbar = game.add.graphics(0,0);
@@ -89,7 +90,7 @@ TopDownGame.Game.prototype = {
       this.chicken.anchor.setTo(0.5, 0.5);
       this.chicken.animations.add('right', [3, 4, 5, 6], 7, true);
       this.chicken.play('right');
-      this.chicken.body.moves = false;
+      this.chicken .body.moves = false;
       this.chicken.anchor.x = 0.5;
       this.chicken.anchor.y = 0.5;
       this.chicken.health = 1;
