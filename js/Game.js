@@ -5,17 +5,27 @@ TopDownGame.Game = function(){};
 
 TopDownGame.Game.prototype = {
   create: function() {
-    this.map = this.game.add.tilemap('level1');
+    this.map = this.game.add.tilemap('world_map');
 
     //First argument: the tileset name as specified in Tiled; Second argument: the key to the asset
-    this.map.addTilesetImage('tiles', 'gameTiles');
+    this.map.addTilesetImage('tileset', 'gameTiles');
 
     //Create layer
-    this.backgroundlayer = this.map.createLayer('backgroundLayer');
-    this.blockedLayer = this.map.createLayer('blockedLayer');
+    this.blockedLayer = this.map.createLayer('waterLayer');
+    this.backgroundlayer = this.map.createLayer('groundLayer1');
+    this.backgroundlayer = this.map.createLayer('groundLayer2');
+    this.backgroundlayer = this.map.createLayer('groundLayer3');
+    this.backgroundlayer = this.map.createLayer('pathLayer');
+    this.backgroundlayer = this.map.createLayer('pathLayer2');
+    // this.backgroundlayer = this.map.createLayer('pathLayer3');
+    this.blockedLayer = this.map.createLayer('CANTGOHERE');
+    // this.backgroundlayer = this.map.createLayer('topLayer');
+    // this.backgroundlayer = this.map.createLayer('topLayer2');
+    // this.backgroundlayer = this.map.createLayer('topLayer3');
 
     //Collision on blocked layer. 2000 is the number of bricks we can collide into - this is found in the json file for the map
-    this.map.setCollisionBetween(1, 2000, true, 'blockedLayer');
+    this.map.setCollisionBetween(1, 20000, true, 'waterLayer');
+    this.map.setCollisionBetween(1, 20000, true, 'CANTGOHERE');
 
     //Resizes game world to match the layer dimensions
     this.backgroundlayer.resizeWorld();
