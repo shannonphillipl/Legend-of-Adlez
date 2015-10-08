@@ -36,6 +36,11 @@ TopDownGame.Game.prototype = {
     this.createChickens();
     this.createExplosions();
 
+    //adding in healthbar:
+    // this.healthbar = game.add.graphics(0,0);
+    // this.group.add(this.healthbar);
+    ////
+
     //create player
     var result = this.findObjectsByType('playerStart', this.map, 'playerStart');
 
