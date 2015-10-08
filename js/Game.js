@@ -29,6 +29,9 @@ TopDownGame.Game.prototype = {
     this.backgroundlayer = this.map.createLayer('pathLayer1');
     this.backgroundlayer = this.map.createLayer('pathLayer2');
     this.blockedLayer = this.map.createLayer('CANTGOHERE');
+    this.text;
+
+    
 
     // this.backgroundlayer = this.map.createLayer('topLayer');
     // this.backgroundlayer = this.map.createLayer('topLayer2');
@@ -47,11 +50,6 @@ TopDownGame.Game.prototype = {
     this.createChickens();
     this.createExplosions();
 
-    //adding in healthbar:
-    // this.healthbar = game.add.graphics(0,0);
-    // this.group.add(this.healthbar);
-    ////
-
     //create player
     var result = this.findObjectsByType('playerStart', this.map, 'playerStart');
 
@@ -60,6 +58,12 @@ TopDownGame.Game.prototype = {
     this.player = this.game.add.sprite(result[0].x, result[0].y, 'player');
     this.game.physics.arcade.enable(this.player);
     this.player.health = 5;
+
+    this.text = this.game.add.text(this.game.camera.x, this.game.camera.y, "Health: " + this.player.health, {
+      font: "24px Arial",
+      fill: "#ff0044",
+      align: "center"
+    });
 
     //the camera follows player
     this.game.camera.follow(this.player);
@@ -271,6 +275,7 @@ TopDownGame.Game.prototype = {
       this.explosion.reset(this.player.body.x, this.player.body.y);
       this.explosion.play('kaboom', 30, false, true);
     }
+    this.updateText();
   },
 
   enterDoor: function(player, door) {
@@ -283,10 +288,16 @@ TopDownGame.Game.prototype = {
     this.zeldaBullet.kill();
   },
 
+  updateText: function() {
+    text.setText("Health:" + this.player.health);
+  },
+
   update: function() {
     //player movement
     this.player.body.velocity.y = 0;
     this.player.body.velocity.x = 0;
+    this.text.x = this.game.camera.x;
+    this.text.y = this.game.camera.y;
 
 
     if(this.cursors.up.isDown) {
@@ -314,6 +325,7 @@ TopDownGame.Game.prototype = {
     }else {
       this.player.animations.stop();
     }
+
 
     //collission
     this.game.physics.arcade.collide(this.player, this.blockedLayer);
