@@ -5,23 +5,52 @@ TopDownGame.Game = function(){};
 
 TopDownGame.Game.prototype = {
   create: function() {
-    this.map = this.game.add.tilemap('world_map');
+
+
+  //Tiled plugin
+
+    this.game.add.plugin(Phaser.Plugin.Tiled);
+
+    this.cacheKey = Phaser.Plugin.Tiled.utils.cacheKey;
+    //gulp asset pack
+    this.game.load.pack('world_map', 'assets/tilemaps/world_map.json');
+
+    // this.game.load.tiledmap(cacheKey('world_map', 'tiledmap'), 'assets/tilemaps/world_map.json', null, Phaser.Tilemap.TILED_JSON);
+    //
+    this.game.load.image(cacheKey('world_map', 'tileset', 'tileset'), 'assets/tilemaps/world_map/tileset.png');
+    //
+    // this.game.load.image(cacheKey('world_map', 'layer', 'waterLayer'), null);
+    // this.game.load.image(cacheKey('world_map', 'layer', 'groundLayer1'), null);
+    // this.game.load.image(cacheKey('world_map', 'layer', 'groundLayer2'), null);
+    // this.game.load.image(cacheKey('world_map', 'layer', 'groundLayer3'), null);
+    // this.game.load.image(cacheKey('world_map', 'layer', 'pathLayer'), null);
+    // this.game.load.image(cacheKey('world_map', 'layer', 'pathLayer2'), null);
+    // this.game.load.image(cacheKey('world_map', 'layer', 'pathLayer3'), null);
+    // this.game.load.image(cacheKey('world_map', 'layer', 'CANTGOHERE'), null);
+    // this.game.load.image(cacheKey('world_map', 'layer', 'topLayer'), null);
+    // this.game.load.image(cacheKey('world_map', 'layer', 'topLayer2'), null);
+    // this.game.load.image(cacheKey('world_map', 'layer', 'topLayer3'), null);
+
+    var map = this.game.add.tiledmap('world_map');
+
+
+    // this.map = this.game.add.tilemap('world_map');
 
     //First argument: the tileset name as specified in Tiled; Second argument: the key to the asset
-    this.map.addTilesetImage('tileset', 'tileset');
+    // this.map.addTilesetImage('tileset', 'tileset');
 
     //Create layer
-    this.blockedLayer = this.map.createLayer('waterLayer');
-    this.backgroundlayer = this.map.createLayer('groundLayer1');
-    this.backgroundlayer = this.map.createLayer('groundLayer2');
-    this.backgroundlayer = this.map.createLayer('groundLayer3');
-    this.backgroundlayer = this.map.createLayer('pathLayer');
-    this.backgroundlayer = this.map.createLayer('pathLayer2');
-    this.backgroundlayer = this.map.createLayer('pathLayer3');
-    this.blockedLayer = this.map.createLayer('CANTGOHERE');
-    this.backgroundlayer = this.map.createLayer('topLayer');
-    this.backgroundlayer = this.map.createLayer('topLayer2');
-    this.backgroundlayer = this.map.createLayer('topLayer3');
+    // this.blockedLayer = this.map.createLayer('waterLayer');
+    // this.backgroundlayer = this.map.createLayer('groundLayer1');
+    // this.backgroundlayer = this.map.createLayer('groundLayer2');
+    // this.backgroundlayer = this.map.createLayer('groundLayer3');
+    // this.backgroundlayer = this.map.createLayer('pathLayer');
+    // this.backgroundlayer = this.map.createLayer('pathLayer2');
+    // this.backgroundlayer = this.map.createLayer('pathLayer3');
+    // this.blockedLayer = this.map.createLayer('CANTGOHERE');
+    // this.backgroundlayer = this.map.createLayer('topLayer');
+    // this.backgroundlayer = this.map.createLayer('topLayer2');
+    // this.backgroundlayer = this.map.createLayer('topLayer3');
 
     //Collision on blocked layer. 2000 is the number of bricks we can collide into - this is found in the json file for the map
     this.map.setCollisionBetween(1, 20000, true, 'waterLayer');
