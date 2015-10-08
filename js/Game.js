@@ -3,9 +3,15 @@ var TopDownGame = TopDownGame || {};
 //title screen
 TopDownGame.Game = function(){};
 
+var music;
+
 TopDownGame.Game.prototype = {
   create: function() {
     this.map = this.game.add.tilemap('level1');
+
+    //Add music
+    music = game.add.audio('adlezSong');
+    music.onDecoded.add(start, this);
 
     //First argument: the tileset name as specified in Tiled; Second argument: the key to the asset
     this.map.addTilesetImage('tiles', 'gameTiles');
@@ -162,7 +168,7 @@ TopDownGame.Game.prototype = {
     });
     return result;
   },
- 
+
 
   //fire bullet
   fireBullet: function() {

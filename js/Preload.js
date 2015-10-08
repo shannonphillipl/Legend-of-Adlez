@@ -22,6 +22,7 @@ TopDownGame.Preload.prototype = {
     this.load.spritesheet('chicken', 'assets/images/chicken.png', 32, 32);
     this.game.load.spritesheet('kaboom', 'assets/images/explosion.png', 64, 64);
     this.load.spritesheet('goonUp', 'assets/images/goonUp.png', 32, 32);
+    // this.load.audio('adlezSong', 'assets/audio/adlezSong.ogg');
   },
   create: function() {
     this.state.start('Game');
