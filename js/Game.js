@@ -11,17 +11,8 @@ TopDownGame.Game.prototype = {
     this.map = this.game.add.tilemap('world_map');
 
     //Add music
-<<<<<<< HEAD
       music = this.add.audio('adlezSong');
       music.play();
-=======
-    // music = this.add.audio('adlezSong');
-    // music.play();
-    //
-    // //Add music
-    //  music = this.sound.play('adlezSong');
-
->>>>>>> e712bcd76adec550958a4e1412350ee82cd0a92a
 
     //First argument: the tileset name as specified in Tiled; Second argument: the key to the asset
     this.map.addTilesetImage('tileset', 'gameTiles');
@@ -263,6 +254,7 @@ TopDownGame.Game.prototype = {
     this.explosion = this.explosions.getFirstExists(false);
     this.explosion.reset(chicken.body.x, chicken.body.y);
     this.explosion.play('kaboom', 30, false, true);
+    this.sound.play('boom');
   },
 
   goonKiller: function(zeldaBullet, goon) {
@@ -273,6 +265,7 @@ TopDownGame.Game.prototype = {
       this.explosion = this.explosions.getFirstExists(false);
       this.explosion.reset(this.goon.body.x, this.goon.body.y);
       this.explosion.play('kaboom', 30, false, true);
+      this.sound.play('boom');
     }
   },
 
@@ -290,6 +283,7 @@ TopDownGame.Game.prototype = {
       this.explosion = this.explosions.getFirstExists(false);
       this.explosion.reset(this.player.body.x, this.player.body.y);
       this.explosion.play('kaboom', 30, false, true);
+      this.sound.play('boom');
     }
     this.updateText();
   },
