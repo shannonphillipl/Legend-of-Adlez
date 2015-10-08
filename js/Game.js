@@ -13,7 +13,7 @@ TopDownGame.Game.prototype = {
     //Add music
       music = this.add.audio('adlezSong');
       music.play();
-      
+
     //First argument: the tileset name as specified in Tiled; Second argument: the key to the asset
     this.map.addTilesetImage('tileset', 'gameTiles');
 
@@ -26,12 +26,11 @@ TopDownGame.Game.prototype = {
     this.backgroundlayer = this.map.createLayer('pathLayer2');
     this.blockedLayer = this.map.createLayer('CANTGOHERE');
     this.text;
+    this.backgroundlayer = this.map.createLayer('topLayer1');
+    this.backgroundlayer = this.map.createLayer('topLayer2');
+    this.backgroundlayer = this.map.createLayer('topLayer3');
+    this.backgroundlayer = this.map.createLayer('topLayer4');
 
-
-
-    // this.backgroundlayer = this.map.createLayer('topLayer');
-    // this.backgroundlayer = this.map.createLayer('topLayer2');
-    // this.backgroundlayer = this.map.createLayer('topLayer3');
 
     //Collision on blocked layer. 2000 is the number of bricks we can collide into - this is found in the json file for the map
     this.map.setCollisionBetween(1, 20000, true, 'waterLayer');
