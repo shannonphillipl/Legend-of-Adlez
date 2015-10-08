@@ -5,30 +5,39 @@ TopDownGame.Game = function(){};
 
 TopDownGame.Game.prototype = {
   create: function() {
-    this.map = this.game.add.tilemap('level1');
+    this.map = this.game.add.tilemap('world_map');
 
     //First argument: the tileset name as specified in Tiled; Second argument: the key to the asset
-    this.map.addTilesetImage('tiles', 'gameTiles');
+    this.map.addTilesetImage('tileset', 'gameTiles');
 
     //Create layer
-    this.backgroundlayer = this.map.createLayer('backgroundLayer');
-    this.blockedLayer = this.map.createLayer('blockedLayer');
+    this.blockedLayer = this.map.createLayer('waterLayer');
+    this.backgroundlayer = this.map.createLayer('groundLayer1');
+    this.backgroundlayer = this.map.createLayer('groundLayer2');
+    this.backgroundlayer = this.map.createLayer('groundLayer3');
+    this.backgroundlayer = this.map.createLayer('pathLayer1');
+    this.backgroundlayer = this.map.createLayer('pathLayer2');
+    this.blockedLayer = this.map.createLayer('CANTGOHERE');
+
+    // this.backgroundlayer = this.map.createLayer('topLayer');
+    // this.backgroundlayer = this.map.createLayer('topLayer2');
+    // this.backgroundlayer = this.map.createLayer('topLayer3');
 
     //Collision on blocked layer. 2000 is the number of bricks we can collide into - this is found in the json file for the map
-    this.map.setCollisionBetween(1, 2000, true, 'blockedLayer');
+    this.map.setCollisionBetween(1, 20000, true, 'waterLayer');
+    this.map.setCollisionBetween(1, 2000, true, 'CANTGOHERE');
 
     //Resizes game world to match the layer dimensions
     this.backgroundlayer.resizeWorld();
 
     this.createItems();
-    this.createDoors();
     this.createZeldaBullets();
     this.createGoons();
     this.createChickens();
     this.createExplosions();
 
     //create player
-    var result = this.findObjectsByType('playerStart', this.map, 'objectsLayer');
+    var result = this.findObjectsByType('playerStart', this.map, 'playerStart');
 
 
     //we know there is just one result
@@ -64,13 +73,13 @@ TopDownGame.Game.prototype = {
   },
   createItems: function() {
     //create items
-    this.items = this.game.add.group();
-    this.items.enableBody = true;
-    var item;
-    result = this.findObjectsByType('item', this.map, 'objectsLayer');
-    result.forEach(function(element) {
-      this.createFromTiledObject(element, this.items);
-    }, this);
+    // this.items = this.game.add.group();
+    // this.items.enableBody = true;
+    // var item;
+    // result = this.findObjectsByType('item', this.map, 'objectsLayer');
+    // result.forEach(function(element) {
+    //   this.createFromTiledObject(element, this.items);
+    // }, this);
   },
 
   createZeldaBullets: function() {
@@ -82,16 +91,6 @@ TopDownGame.Game.prototype = {
     this.zeldaBullets.setAll('anchor.y', 1);
     this.zeldaBullets.setAll('outOfBoundsKill', true);
     this.zeldaBullets.setAll('checkWorldBounds', true);
-  },
-
-  createDoors: function() {
-    this.doors = this.game.add.group();
-    this.doors.enableBody = true;
-    this.result = this.findObjectsByType('door', this.map, 'objectsLayer');
-
-    this.result.forEach(function(element) {
-      this.createFromTiledObject(element, this.doors);
-    }, this);
   },
 
   createExplosions: function() {
@@ -162,7 +161,7 @@ TopDownGame.Game.prototype = {
     });
     return result;
   },
- 
+
 
   //fire bullet
   fireBullet: function() {
