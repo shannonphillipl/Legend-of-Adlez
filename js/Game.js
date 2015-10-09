@@ -199,7 +199,7 @@ TopDownGame.Game.prototype = {
       });
   },
 
-  chickenKiller: function(zeldaBullet, enemy) {
+  enemyKiller: function(zeldaBullet, enemy) {
     this.zeldaBullet.kill();
 
     if (enemy.key == "chicken") {
@@ -222,27 +222,24 @@ TopDownGame.Game.prototype = {
     }
   },
 
-  zeldaKiller: function(player, goon) {
-    this.player.health -=1;
-    this.xdirection = this.player.body.x - goon.body.x;
-    this.ydirection = goon.body.y - this.player.body.y;
+  zeldaKiller: function(player, enemy) {
+    this.xdirection = this.player.body.x - enemy.body.x;
+    this.ydirection = enemy.body.y - this.player.body.y;
     this.xbounceVelocity = this.xdirection * 30;
     this.ybounceVelocity = this.ydirection * -30;
-      this.player.body.velocity.y = this.ybounceVelocity;
-
-      this.player.body.velocity.x = this.xbounceVelocity;
-    if(this.player.health <=0) {
-      this.player.kill();
-      this.explosion = this.explosions.getFirstExists(false);
-      this.explosion.reset(this.player.body.x, this.player.body.y);
-      this.explosion.play('kaboom', 30, false, true);
-      this.sound.play('boom');
+    this.player.body.velocity.y = this.ybounceVelocity;
+    this.player.body.velocity.x = this.xbounceVelocity;
+    if (enemy.key == "goon") {
+      player.health -=1;
+      if(player.health <=0) {
+        this.player.kill();
+        this.explosion = this.explosions.getFirstExists(false);
+        this.explosion.reset(this.player.body.x, this.player.body.y);
+        this.explosion.play('kaboom', 30, false, true);
+        this.sound.play('boom');
+      }
     }
     this.updateText();
-  },
-
-  enterDoor: function(player, door) {
-    console.log('entering door that will take you to '+door.targetTilemap+' on x:'+door.targetX+' and y:'+door.targetY);
   },
 
   resetZeldaBullet: function(bullet) {
@@ -252,7 +249,7 @@ TopDownGame.Game.prototype = {
   },
 
   updateText: function() {
-    text.setText("Health:" + this.player.health);
+    this.text.setText("Health:" + this.player.health);
   },
 
   update: function() {
@@ -298,8 +295,8 @@ TopDownGame.Game.prototype = {
 
 
     //HERE!
-    this.game.physics.arcade.overlap(this.zeldaBullet, this.enemies.children, this.chickenKiller, null, this);
-    this.game.physics.arcade.overlap(this.player, this.enemies.children, this.chickenKiller, null, this);
+    this.game.physics.arcade.overlap(this.zeldaBullet, this.enemies.children, this.enemyKiller, null, this);
+    this.game.physics.arcade.overlap(this.player, this.enemies.children, this.zeldaKiller, null, this);
 
   },
 
