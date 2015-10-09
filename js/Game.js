@@ -19,16 +19,21 @@ TopDownGame.Game.prototype = {
 
     //Create layer
     this.blockedLayer = this.map.createLayer('waterLayer');
-    this.backgroundlayer = this.map.createLayer('groundLayer1');
-    this.backgroundlayer = this.map.createLayer('groundLayer2');
-    this.backgroundlayer = this.map.createLayer('groundLayer3');
-    this.backgroundlayer = this.map.createLayer('pathLayer1');
-    this.backgroundlayer = this.map.createLayer('pathLayer2');
+    this.backgroundLayer = this.map.createLayer('groundLayer1');
+    this.backgroundLayer = this.map.createLayer('groundLayer2');
+    this.backgroundLayer = this.map.createLayer('groundLayer3');
+    this.backgroundLayer = this.map.createLayer('pathLayer1');
+    this.backgroundLayer = this.map.createLayer('pathLayer2');
     this.blockedLayer = this.map.createLayer('CANTGOHERE');
-    this.foregroundlayer = this.map.createLayer('topLayer1');
-    this.foregroundlayer = this.map.createLayer('topLayer2');
-    this.foregroundlayer = this.map.createLayer('topLayer3');
-    this.foregroundlayer = this.map.createLayer('topLayer4');
+    // this.blockedLayer = this.map.createLayer('topLayer1');
+    // this.blockedLayer = this.map.createLayer('topLayer2');
+    // this.blockedLayer = this.map.createLayer('topLayer3');
+    // this.blockedLayer = this.map.createLayer('topLayer4');
+
+    this.foregroundLayer = this.map.createLayer('topLayer1');
+    this.foregroundLayer = this.map.createLayer('topLayer2');
+    this.foregroundLayer = this.map.createLayer('topLayer3');
+    this.foregroundLayer = this.map.createLayer('topLayer4');
 
 
 
@@ -36,9 +41,13 @@ TopDownGame.Game.prototype = {
     //Collision on blocked layer. 2000 is the number of bricks we can collide into - this is found in the json file for the map
     this.map.setCollisionBetween(1, 2000, true, 'waterLayer');
     this.map.setCollisionBetween(1, 2000, true, 'CANTGOHERE');
+    // this.map.setCollisionBetween(1, 2000, true, 'topLayer1');
+    // this.map.setCollisionBetween(1, 2000, true, 'topLayer2');
+    // this.map.setCollisionBetween(1, 2000, true, 'topLayer3');
+    // this.map.setCollisionBetween(1, 2000, true, 'topLayer4');
 
     //Resizes game world to match the layer dimensions
-    this.backgroundlayer.resizeWorld();
+    this.backgroundLayer.resizeWorld();
 
     this.createZeldaBullets();
     this.createGoons();

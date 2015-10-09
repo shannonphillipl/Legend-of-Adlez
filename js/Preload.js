@@ -23,11 +23,10 @@ TopDownGame.Preload.prototype = {
     this.game.load.spritesheet('kaboom', 'assets/images/explosion.png', 64, 64);
     this.load.spritesheet('goonUp', 'assets/images/goonUp.png', 32, 32);
 
-    //this.load.audio('adlezSong', ['assets/audio/adlezSong.mp3', 'assets/audio/adlezSong.ogg']);
+    this.load.audio('adlezSong', ['assets/audio/adlezSong.mp3', 'assets/audio/adlezSong.ogg']);
 
     this.load.audio('adlezSpell', ['assets/audio/adlezSpell.mp3', 'assets/audio/adlezSpell.ogg']);
     this.load.audio('adlezStep', ['assets/audio/adlezStep.mp3', 'assets/audio/adlezStep.ogg']);
-    this.load.audio('boom', ['assets/audio/boom.mp3', 'assets/audio/boom.ogg'])
 
   },
   create: function() {
