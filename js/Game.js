@@ -216,6 +216,7 @@ TopDownGame.Game.prototype = {
       this.explosion.reset(enemy.body.x, enemy.body.y);
       this.explosion.play('kaboom', 30, false, true);
       this.sound.play('boom');
+      this.sound.play('adlezLaugh');
       enemy.kill();
     } else if (enemy.key == "goon") {
       enemy.health -=1;
@@ -227,7 +228,8 @@ TopDownGame.Game.prototype = {
         this.explosion.reset(enemy.body.x, enemy.body.y);
         this.explosion.play('kaboom', 30, false, true);
         this.sound.play('boom');
-      }
+        this.sound.play('adlezLaugh');
+        }
     }
   },
 
