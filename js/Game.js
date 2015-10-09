@@ -11,12 +11,8 @@ TopDownGame.Game.prototype = {
     this.map = this.game.add.tilemap('world_map');
 
     //Add music
-    // music = this.add.audio('adlezSong');
-    // music.play();
-    //
-    // //Add music
-    //  music = this.sound.play('adlezSong');
-
+      music = this.add.audio('adlezSong');
+      music.play();
 
     //First argument: the tileset name as specified in Tiled; Second argument: the key to the asset
     this.map.addTilesetImage('tileset', 'gameTiles');
@@ -29,11 +25,13 @@ TopDownGame.Game.prototype = {
     this.backgroundlayer = this.map.createLayer('pathLayer1');
     this.backgroundlayer = this.map.createLayer('pathLayer2');
     this.blockedLayer = this.map.createLayer('CANTGOHERE');
-    this.text;
-    this.backgroundlayer = this.map.createLayer('topLayer1');
-    this.backgroundlayer = this.map.createLayer('topLayer2');
-    this.backgroundlayer = this.map.createLayer('topLayer3');
-    this.backgroundlayer = this.map.createLayer('topLayer4');
+    this.foregroundlayer = this.map.createLayer('topLayer1');
+    this.foregroundlayer = this.map.createLayer('topLayer2');
+    this.foregroundlayer = this.map.createLayer('topLayer3');
+    this.foregroundlayer = this.map.createLayer('topLayer4');
+
+
+
 
     //Collision on blocked layer. 2000 is the number of bricks we can collide into - this is found in the json file for the map
     this.map.setCollisionBetween(1, 2000, true, 'waterLayer');
@@ -208,6 +206,7 @@ TopDownGame.Game.prototype = {
       this.explosion = this.explosions.getFirstExists(false);
       this.explosion.reset(enemy.body.x, enemy.body.y);
       this.explosion.play('kaboom', 30, false, true);
+      this.sound.play('boom');
       enemy.kill();
     } else if (enemy.key == "goon") {
       enemy.health -=1;
@@ -218,6 +217,7 @@ TopDownGame.Game.prototype = {
         this.explosion = this.explosions.getFirstExists(false);
         this.explosion.reset(enemy.body.x, enemy.body.y);
         this.explosion.play('kaboom', 30, false, true);
+        this.sound.play('boom');
       }
     }
   },
@@ -236,6 +236,7 @@ TopDownGame.Game.prototype = {
       this.explosion = this.explosions.getFirstExists(false);
       this.explosion.reset(this.player.body.x, this.player.body.y);
       this.explosion.play('kaboom', 30, false, true);
+      this.sound.play('boom');
     }
     this.updateText();
   },
@@ -264,22 +265,22 @@ TopDownGame.Game.prototype = {
 
     if(this.cursors.up.isDown) {
       this.player.facing = "up";
-      this.player.body.velocity.y -= 50;
+      this.player.body.velocity.y -= 175;
       this.player.animations.play('up');
 
     } else if(this.cursors.down.isDown) {
       this.player.facing = "down";
-      this.player.body.velocity.y +=50;
+      this.player.body.velocity.y +=175;
       this.player.animations.play('down');
 
     } else if(this.cursors.left.isDown) {
       this.player.facing = "left";
-      this.player.body.velocity.x -= 50;
+      this.player.body.velocity.x -= 175;
       this.player.animations.play('left');
 
     } else if(this.cursors.right.isDown) {
       this.player.facing = "right";
-      this.player.body.velocity.x +=50;
+      this.player.body.velocity.x +=175;
       this.player.animations.play('right');
 
     } else if (this.fireButton.isDown) {
