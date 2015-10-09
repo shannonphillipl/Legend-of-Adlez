@@ -25,11 +25,6 @@ TopDownGame.Game.prototype = {
     this.backgroundLayer = this.map.createLayer('pathLayer1');
     this.backgroundLayer = this.map.createLayer('pathLayer2');
     this.blockedLayer = this.map.createLayer('CANTGOHERE');
-    // this.blockedLayer = this.map.createLayer('topLayer1');
-    // this.blockedLayer = this.map.createLayer('topLayer2');
-    // this.blockedLayer = this.map.createLayer('topLayer3');
-    // this.blockedLayer = this.map.createLayer('topLayer4');
-
     this.foregroundLayer = this.map.createLayer('topLayer1');
     this.foregroundLayer = this.map.createLayer('topLayer2');
     this.foregroundLayer = this.map.createLayer('topLayer3');
@@ -50,6 +45,7 @@ TopDownGame.Game.prototype = {
     this.backgroundLayer.resizeWorld();
 
     this.createZeldaBullets();
+    this.createGannonBullets();
     this.createExplosions();
 
     this.createEnemies();
@@ -76,6 +72,7 @@ TopDownGame.Game.prototype = {
 
     //add non-player spritesheets
     this.zeldaBullet = this.game.add.sprite('zeldaBullet');
+    this.gannonBullet = this.game.add.sprite('gannonBullet');
     this.goons = this.game.add.sprite('goonDown');
     this.chickens = this.game.add.sprite('chicken');
     this.nonnag = this.game.add.sprite('nonnag');
@@ -85,6 +82,8 @@ TopDownGame.Game.prototype = {
     this.cursors = this.game.input.keyboard.createCursorKeys();
 
     this.zeldaBulletTime = 0;
+    this.gannonBulletTime = 0;
+
     this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
     this.player.animations.add('left', [4, 5, 6, 7], 7, true);
@@ -96,6 +95,7 @@ TopDownGame.Game.prototype = {
     this.zeldaBullets.callAll('animations.add', 'animations', 'down', [12, 13, 14, 15], 7, true);
     this.zeldaBullets.callAll('animations.add', 'animations', 'up', [0, 1, 2, 3], 7, true);
     this.zeldaBullets.callAll('animations.add', 'animations', 'up', [0, 1, 2, 3], 7, true);
+    this.gannonBullets.callAll('animations.add', 'animations', 'shoot', [0, 1, 2, 3, 4, 5], 10, true);
     this.explosions.callAll('animations.add', 'animations', 'kaboom', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], 15, true);
   },
 
@@ -145,11 +145,21 @@ TopDownGame.Game.prototype = {
     this.zeldaBullets = this.game.add.group();
     this.zeldaBullets.enableBody = true;
     this.zeldaBullets.physicsBodyType = Phaser.Physics.ARCADE;
-    this.zeldaBullets.createMultiple(30, 'zeldaBullet');
+    this.zeldaBullets.createMultiple(40, 'zeldaBullet');
     this.zeldaBullets.setAll('anchor.x', 0.5);
     this.zeldaBullets.setAll('anchor.y', 1);
     this.zeldaBullets.setAll('outOfBoundsKill', true);
     this.zeldaBullets.setAll('checkWorldBounds', true);
+  },
+  createGannonBullets: function() {
+    this.gannonBullets = this.game.add.group();
+    this.gannonBullets.enableBody = true;
+    this.gannonBullets.physicsBodyType = Phaser.Physics.ARCADE;
+    this.gannonBullets.createMultiple(40, 'gannonBullet');
+    this.gannonBullets.setAll('anchor.x', 0.5);
+    this.gannonBullets.setAll('anchor.y', 1);
+    this.gannonBullets.setAll('outOfBoundsKill', true);
+    this.gannonBullets.setAll('checkWorldBounds', true);
   },
 
   createExplosions: function() {
@@ -203,6 +213,19 @@ TopDownGame.Game.prototype = {
             this.zeldaBullet.body.velocity.y = 200;
             this.zeldaBulletTime = this.game.time.now + 200;
           }
+      }
+    }
+  },
+
+  fireGannonBullet: function() {
+    if (this.game.time.now > this.gannonBulletTime) {
+      //  Grab the first bullet we can from the pool
+      this.gannonBullet = this.gannonBullets.getFirstExists(false);
+      if (this.gannonBullet) {
+        this.gannonBullets.callAllExists('play', false, 'shoot');
+        this.gannonBullet.reset(this.nonnag.x + 30, this.nonnag.y + 30);
+        this.gannonBullet.body.velocity.x = 200;
+        this.gannonBulletTime = this.game.time.now + 100;
       }
 
     }
@@ -281,6 +304,8 @@ TopDownGame.Game.prototype = {
     this.text.x = this.game.camera.x;
     this.text.y = this.game.camera.y;
 
+    this.fireGannonBullet();
+
 
     if(this.cursors.up.isDown) {
       this.player.facing = "up";
@@ -309,7 +334,7 @@ TopDownGame.Game.prototype = {
     }
 
 
-    //collission
+    //colission
     this.game.physics.arcade.collide(this.player, this.blockedLayer);
     this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
     this.game.physics.arcade.overlap(this.player, this.doors, this.enterDoor, null, this);
