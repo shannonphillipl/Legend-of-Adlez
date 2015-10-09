@@ -43,7 +43,6 @@ TopDownGame.Game.prototype = {
     this.backgroundlayer.resizeWorld();
 
     this.createZeldaBullets();
-    this.createGoons();
     this.createExplosions();
 
     this.createEnemies();
@@ -99,7 +98,6 @@ TopDownGame.Game.prototype = {
     var enemy;
     result = this.findObjectsByType('chicken', this.map, 'basicEnemyLayer');
     result.forEach(function(element) {
-      var key = "chicken" + String(element.id);
       this.chicken = this.enemies.create(element.x, element.y, 'chicken');
       this.chicken.anchor.setTo(0.5, 0.5);
       this.chicken.animations.add('right', [3, 4, 5, 6], 7, true);
@@ -108,22 +106,19 @@ TopDownGame.Game.prototype = {
       this.chicken.anchor.x = 0.5;
       this.chicken.anchor.y = 0.5;
       this.chicken.health = 1;
-      this.chicken.key = key;
       this.tween = this.game.add.tween(this.chicken).to( { x: this.chicken.x+randomIntFromInterval(80,100) }, randomIntFromInterval(400,11000), Phaser.Easing.Linear.None, true, 0, 1000, true);
     }, this);
 
     result = this.findObjectsByType('goon', this.map, 'basicEnemyLayer');
     result.forEach(function(element) {
-      var key = "goon" + String(element.id);
       this.goon = this.enemies.create(element.x, element.y, 'goon');
       this.goon.anchor.setTo(0.5, 0.5);
-      this.goon.animations.add('right', [3, 4, 5, 6], 7, true);
-      this.goon.play('right');
+      this.goon.animations.add('down', [0, 1, 2, 3], 20, true);
+      this.goon.play('down');
       this.goon.body.moves = false;
       this.goon.anchor.x = 0.5;
       this.goon.anchor.y = 0.5;
       this.goon.health = 5;
-      this.goon.key = key;
       this.tween = this.game.add.tween(this.goon).to( { x: this.goon.x+randomIntFromInterval(80,100) }, randomIntFromInterval(400,11000), Phaser.Easing.Linear.None, true, 0, 1000, true);
     }, this);
   },
@@ -143,26 +138,6 @@ TopDownGame.Game.prototype = {
     this.explosions = this.game.add.group();
     this.explosions.createMultiple(30, 'kaboom');
   },
-
-  createGoons: function() {
-    this.goons = this.game.add.group();
-    this.goons.enableBody = true;
-    this.goons.physicsBodyType = Phaser.Physics.ARCADE;
-
-    this.goon = this.goons.create(48, 50, 'goonDown');
-    this.goon.health = 5;
-    this.goon.anchor.setTo(0.5, 0.5);
-    this.goon.animations.add('goonDown', [0, 1, 2, 3], 20, true);
-    this.goon.play('goonDown');
-    this.goon.body.moves = true;
-
-    this.goons.x = 250;
-    this.goons.y = 100;
-
-    //Add random movement function
-    this.tween = this.game.add.tween(this.goons).to( { y: 200 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
-  },
-
 
   //find objects in a Tiled layer that containt a property called "type" equal to a certain value
   findObjectsByType: function(type, map, layer) {
@@ -226,30 +201,31 @@ TopDownGame.Game.prototype = {
       });
   },
 
-  chickenKiller: function(zeldaBullet, chicken) {
+  chickenKiller: function(zeldaBullet, enemy) {
     this.zeldaBullet.kill();
-    chicken.kill();
-    //  And create an explosion :)
-    this.explosion = this.explosions.getFirstExists(false);
-    this.explosion.reset(chicken.body.x, chicken.body.y);
-    this.explosion.play('kaboom', 30, false, true);
-  },
 
-  goonKiller: function(zeldaBullet, goon) {
-    this.goon.health -=1;
-    this.zeldaBullet.kill();
-    if(this.goon.health <= 0){
-      this.goon.kill();
+    if (enemy.key == "chicken") {
       this.explosion = this.explosions.getFirstExists(false);
-      this.explosion.reset(this.goon.body.x, this.goon.body.y);
+      this.explosion.reset(enemy.body.x, enemy.body.y);
       this.explosion.play('kaboom', 30, false, true);
+      enemy.kill();
+    } else if (enemy.key == "goon") {
+      enemy.health -=1;
+      this.zeldaBullet.kill();
+      if(enemy.health <= 0){
+        enemy.kill();
+        //  And create an explosion :)
+        this.explosion = this.explosions.getFirstExists(false);
+        this.explosion.reset(enemy.body.x, enemy.body.y);
+        this.explosion.play('kaboom', 30, false, true);
+      }
     }
   },
 
   zeldaKiller: function(player, goon) {
     this.player.health -=1;
-    this.xdirection = this.player.body.x - this.goon.body.x;
-    this.ydirection = this.goon.body.y - this.player.body.y;
+    this.xdirection = this.player.body.x - goon.body.x;
+    this.ydirection = goon.body.y - this.player.body.y;
     this.xbounceVelocity = this.xdirection * 30;
     this.ybounceVelocity = this.ydirection * -30;
       this.player.body.velocity.y = this.ybounceVelocity;
@@ -318,8 +294,11 @@ TopDownGame.Game.prototype = {
     this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
     this.game.physics.arcade.overlap(this.player, this.doors, this.enterDoor, null, this);
     this.game.physics.arcade.overlap(this.zeldaBullet, this.goon, this.goonKiller, null, this);
+
+
+    //HERE!
     this.game.physics.arcade.overlap(this.zeldaBullet, this.enemies.children, this.chickenKiller, null, this);
-    this.game.physics.arcade.overlap(this.player, this.goon, this.zeldaKiller, null, this);
+    this.game.physics.arcade.overlap(this.player, this.enemies.children, this.chickenKiller, null, this);
 
   },
 
