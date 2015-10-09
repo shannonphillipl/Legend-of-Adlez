@@ -32,6 +32,7 @@ TopDownGame.Game.prototype = {
 
 
 
+
     //Collision on blocked layer. 2000 is the number of bricks we can collide into - this is found in the json file for the map
     this.map.setCollisionBetween(1, 2000, true, 'waterLayer');
     this.map.setCollisionBetween(1, 2000, true, 'CANTGOHERE');
