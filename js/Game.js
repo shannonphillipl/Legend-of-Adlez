@@ -116,8 +116,8 @@ TopDownGame.Game.prototype = {
       this.goon.body.moves = false;
       this.goon.anchor.x = 0.5;
       this.goon.anchor.y = 0.5;
-      this.goon.health = 5;
-      this.tween = this.game.add.tween(this.goon).to( { x: this.goon.x+randomIntFromInterval(80,100) }, randomIntFromInterval(400,11000), Phaser.Easing.Linear.None, true, 0, 1000, true);
+      this.goon.health = randomIntFromInterval(5,10);
+      this.tween = this.game.add.tween(this.goon).to( { y: this.goon.y+randomIntFromInterval(60,80) }, randomIntFromInterval(400,600), Phaser.Easing.Linear.None, true, 0, 1000, true);
     }, this);
   },
 
