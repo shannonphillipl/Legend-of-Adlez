@@ -155,7 +155,7 @@ TopDownGame.Game.prototype = {
     this.gannonBullets = this.game.add.group();
     this.gannonBullets.enableBody = true;
     this.gannonBullets.physicsBodyType = Phaser.Physics.ARCADE;
-    this.gannonBullets.createMultiple(40, 'gannonBullet');
+    this.gannonBullets.createMultiple(200, 'gannonBullet');
     this.gannonBullets.setAll('anchor.x', 0.5);
     this.gannonBullets.setAll('anchor.y', 1);
     this.gannonBullets.setAll('outOfBoundsKill', true);
@@ -218,7 +218,9 @@ TopDownGame.Game.prototype = {
   },
 
   fireGannonBullet: function() {
+    debugger;
     if (this.game.time.now > this.gannonBulletTime) {
+      debugger;
       //  Grab the first bullet we can from the pool
       this.gannonBullet = this.gannonBullets.getFirstExists(false);
       if (this.gannonBullet) {
@@ -226,6 +228,7 @@ TopDownGame.Game.prototype = {
         this.gannonBullet.reset(this.nonnag.x + 30, this.nonnag.y + 30);
         this.gannonBullet.body.velocity.x = 200;
         this.gannonBulletTime = this.game.time.now + 100;
+        debugger;
       }
 
     }
@@ -291,6 +294,11 @@ TopDownGame.Game.prototype = {
 
     //  Called if the bullet goes out of the screen
     this.zeldaBullet.kill();
+  },
+  resetGannonBullet: function(bullet) {
+
+    //  Called if the bullet goes out of the screen
+    this.gannonBullet.kill();
   },
 
   updateText: function() {
