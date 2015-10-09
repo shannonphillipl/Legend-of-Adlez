@@ -78,6 +78,7 @@ TopDownGame.Game.prototype = {
     this.zeldaBullet = this.game.add.sprite('zeldaBullet');
     this.goons = this.game.add.sprite('goonDown');
     this.chickens = this.game.add.sprite('chicken');
+    this.nonnag = this.game.add.sprite('nonnag');
 
 
     //move player with cursor keys
@@ -127,6 +128,16 @@ TopDownGame.Game.prototype = {
       this.goon.anchor.y = 0.5;
       this.goon.health = randomIntFromInterval(5,10);
       this.tween = this.game.add.tween(this.goon).to( { y: this.goon.y+randomIntFromInterval(60,80) }, randomIntFromInterval(400,600), Phaser.Easing.Linear.None, true, 0, 1000, true);
+    }, this);
+
+    result = this.findObjectsByType('nonnagStart', this.map, 'basicEnemyLayer');
+    result.forEach(function(element) {
+      this.nonnag = this.enemies.create(element.x, element.y, 'nonnag');
+      this.nonnag.anchor.setTo(0.5, 0.5);
+      this.nonnag.body.moves = false;
+      this.nonnag.anchor.x = 0.5;
+      this.nonnag.anchor.y = 0.5;
+      this.nonnag.health = 100;
     }, this);
   },
 
