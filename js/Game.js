@@ -54,12 +54,16 @@ TopDownGame.Game.prototype = {
 
     //create player
     var result = this.findObjectsByType('playerStart', this.map, 'playerStart');
-
+    var nonnagResult = this.findObjectsByType('nonnagStart', this.map, 'basicEnemyLayer');
 
     //we know there is just one result
     this.player = this.game.add.sprite(result[0].x, result[0].y, 'player');
     this.game.physics.arcade.enable(this.player);
-    this.player.health = 5;
+    this.player.health = 50;
+
+    this.nonnag = this.game.add.sprite(nonnagResult[0].x, nonnagResult[0].y, 'nonnag');
+    this.game.physics.arcade.enable(this.nonnag);
+    this.nonnag.health = 100;
 
     this.text = this.game.add.text(this.game.camera.x, this.game.camera.y, "Health: " + this.player.health, {
       font: "24px Arial",
@@ -73,9 +77,11 @@ TopDownGame.Game.prototype = {
     //add non-player spritesheets
     this.zeldaBullet = this.game.add.sprite('zeldaBullet');
     this.gannonBullet = this.game.add.sprite('gannonBullet');
+    this.gannonBullet.scale.setTo(200, 200)
+
     this.goons = this.game.add.sprite('goonDown');
     this.chickens = this.game.add.sprite('chicken');
-    this.nonnag = this.game.add.sprite('nonnag');
+
 
 
     //move player with cursor keys
@@ -93,7 +99,6 @@ TopDownGame.Game.prototype = {
     this.zeldaBullets.callAll('animations.add', 'animations', 'left', [8, 9, 10, 11], 7, true);
     this.zeldaBullets.callAll('animations.add', 'animations', 'right', [4, 5, 6, 7], 7, true);
     this.zeldaBullets.callAll('animations.add', 'animations', 'down', [12, 13, 14, 15], 7, true);
-    this.zeldaBullets.callAll('animations.add', 'animations', 'up', [0, 1, 2, 3], 7, true);
     this.zeldaBullets.callAll('animations.add', 'animations', 'up', [0, 1, 2, 3], 7, true);
     this.gannonBullets.callAll('animations.add', 'animations', 'shoot', [0, 1, 2, 3, 4, 5], 10, true);
     this.explosions.callAll('animations.add', 'animations', 'kaboom', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], 15, true);
@@ -130,15 +135,6 @@ TopDownGame.Game.prototype = {
       this.tween = this.game.add.tween(this.goon).to( { y: this.goon.y+randomIntFromInterval(60,80) }, randomIntFromInterval(400,600), Phaser.Easing.Linear.None, true, 0, 1000, true);
     }, this);
 
-    result = this.findObjectsByType('nonnagStart', this.map, 'basicEnemyLayer');
-    result.forEach(function(element) {
-      this.nonnag = this.enemies.create(element.x, element.y, 'nonnag');
-      this.nonnag.anchor.setTo(0.5, 0.5);
-      this.nonnag.body.moves = false;
-      this.nonnag.anchor.x = 0.5;
-      this.nonnag.anchor.y = 0.5;
-      this.nonnag.health = 100;
-    }, this);
   },
 
   createZeldaBullets: function() {
@@ -218,17 +214,14 @@ TopDownGame.Game.prototype = {
   },
 
   fireGannonBullet: function() {
-    debugger;
     if (this.game.time.now > this.gannonBulletTime) {
-      debugger;
       //  Grab the first bullet we can from the pool
       this.gannonBullet = this.gannonBullets.getFirstExists(false);
       if (this.gannonBullet) {
         this.gannonBullets.callAllExists('play', false, 'shoot');
-        this.gannonBullet.reset(this.nonnag.x + 30, this.nonnag.y + 30);
-        this.gannonBullet.body.velocity.x = 200;
-        this.gannonBulletTime = this.game.time.now + 100;
-        debugger;
+        this.gannonBullet.reset(this.nonnag.x+20, this.nonnag.y + 30);
+        this.gannonBullet.body.velocity.y = 200;
+        this.gannonBulletTime = this.game.time.now + randomIntFromInterval(80,800);
       }
 
     }
@@ -273,19 +266,22 @@ TopDownGame.Game.prototype = {
   zeldaKiller: function(player, enemy) {
     this.xdirection = this.player.body.x - enemy.body.x;
     this.ydirection = enemy.body.y - this.player.body.y;
-    this.xbounceVelocity = this.xdirection * 30;
-    this.ybounceVelocity = this.ydirection * -30;
+    this.xbounceVelocity = this.xdirection * 40;
+    this.ybounceVelocity = this.ydirection * -40;
     this.player.body.velocity.y = this.ybounceVelocity;
     this.player.body.velocity.x = this.xbounceVelocity;
+    if (enemy.key == "gannonBullet") {
+      player.health -=1
+    }
     if (enemy.key == "goon") {
       player.health -=1;
-      if(player.health <=0) {
-        this.player.kill();
-        this.explosion = this.explosions.getFirstExists(false);
-        this.explosion.reset(this.player.body.x, this.player.body.y);
-        this.explosion.play('kaboom', 30, false, true);
-        this.sound.play('boom');
-      }
+    }
+    if(player.health <=0) {
+      this.player.kill();
+      this.explosion = this.explosions.getFirstExists(false);
+      this.explosion.reset(this.player.body.x, this.player.body.y);
+      this.explosion.play('kaboom', 30, false, true);
+      this.sound.play('boom');
     }
     this.updateText();
   },
@@ -317,22 +313,22 @@ TopDownGame.Game.prototype = {
 
     if(this.cursors.up.isDown) {
       this.player.facing = "up";
-      this.player.body.velocity.y -= 175;
+      this.player.body.velocity.y -= 1750;
       this.player.animations.play('up');
 
     } else if(this.cursors.down.isDown) {
       this.player.facing = "down";
-      this.player.body.velocity.y +=175;
+      this.player.body.velocity.y +=1750;
       this.player.animations.play('down');
 
     } else if(this.cursors.left.isDown) {
       this.player.facing = "left";
-      this.player.body.velocity.x -= 175;
+      this.player.body.velocity.x -= 1750;
       this.player.animations.play('left');
 
     } else if(this.cursors.right.isDown) {
       this.player.facing = "right";
-      this.player.body.velocity.x +=175;
+      this.player.body.velocity.x +=1750;
       this.player.animations.play('right');
 
     } else if (this.fireButton.isDown) {
@@ -345,11 +341,10 @@ TopDownGame.Game.prototype = {
     //colission
     this.game.physics.arcade.collide(this.player, this.blockedLayer);
     this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
-    this.game.physics.arcade.overlap(this.player, this.doors, this.enterDoor, null, this);
     this.game.physics.arcade.overlap(this.zeldaBullet, this.goon, this.goonKiller, null, this);
 
-
     //HERE!
+    this.game.physics.arcade.overlap(this.player, this.gannonBullet, this.zeldaKiller, null, this);
     this.game.physics.arcade.overlap(this.zeldaBullet, this.enemies.children, this.enemyKiller, null, this);
     this.game.physics.arcade.overlap(this.player, this.enemies.children, this.zeldaKiller, null, this);
 
