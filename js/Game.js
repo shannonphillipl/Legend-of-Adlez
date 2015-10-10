@@ -59,7 +59,7 @@ TopDownGame.Game.prototype = {
     //we know there is just one result
     this.player = this.game.add.sprite(result[0].x, result[0].y, 'player');
     this.game.physics.arcade.enable(this.player);
-    this.player.health = 50;
+    this.player.health = 10;
 
     this.nonnag = this.game.add.sprite(nonnagResult[0].x-15, nonnagResult[0].y, 'nonnag');
     this.game.physics.arcade.enable(this.nonnag);
