@@ -61,9 +61,10 @@ TopDownGame.Game.prototype = {
     this.game.physics.arcade.enable(this.player);
     this.player.health = 50;
 
-    this.nonnag = this.game.add.sprite(nonnagResult[0].x, nonnagResult[0].y, 'nonnag');
+    this.nonnag = this.game.add.sprite(nonnagResult[0].x-15, nonnagResult[0].y, 'nonnag');
     this.game.physics.arcade.enable(this.nonnag);
-    this.nonnag.health = 100;
+    this.nonnag.health = 50;
+    this.game.add.tween(this.nonnag).to( { x: this.nonnag.x+randomIntFromInterval(30,50) }, randomIntFromInterval(400,800), Phaser.Easing.Linear.None, true, 0, 1000, true);
 
     this.text = this.game.add.text(this.game.camera.x, this.game.camera.y, "Health: " + this.player.health, {
       font: "24px Arial",
@@ -77,7 +78,6 @@ TopDownGame.Game.prototype = {
     //add non-player spritesheets
     this.zeldaBullet = this.game.add.sprite('zeldaBullet');
     this.gannonBullet = this.game.add.sprite('gannonBullet');
-    this.gannonBullet.scale.setTo(200, 200)
 
     this.goons = this.game.add.sprite('goonDown');
     this.chickens = this.game.add.sprite('chicken');
@@ -260,6 +260,18 @@ TopDownGame.Game.prototype = {
         this.sound.play('boom');
         this.sound.play('adlezLaugh');
         }
+    } else if (enemy.key == "nonnag") {
+      enemy.health -=1;
+      this.zeldaBullet.kill();
+      if(enemy.health <= 0){
+        enemy.kill();
+        //  And create an explosion :)
+        this.explosion = this.explosions.getFirstExists(false);
+        this.explosion.reset(enemy.body.x, enemy.body.y);
+        this.explosion.play('kaboom', 30, false, true);
+        this.sound.play('boom');
+        this.sound.play('adlezLaugh');
+        }
     }
   },
 
@@ -313,22 +325,22 @@ TopDownGame.Game.prototype = {
 
     if(this.cursors.up.isDown) {
       this.player.facing = "up";
-      this.player.body.velocity.y -= 1750;
+      this.player.body.velocity.y -= 175;
       this.player.animations.play('up');
 
     } else if(this.cursors.down.isDown) {
       this.player.facing = "down";
-      this.player.body.velocity.y +=1750;
+      this.player.body.velocity.y += 175;
       this.player.animations.play('down');
 
     } else if(this.cursors.left.isDown) {
       this.player.facing = "left";
-      this.player.body.velocity.x -= 1750;
+      this.player.body.velocity.x -= 175;
       this.player.animations.play('left');
 
     } else if(this.cursors.right.isDown) {
       this.player.facing = "right";
-      this.player.body.velocity.x +=1750;
+      this.player.body.velocity.x += 175;
       this.player.animations.play('right');
 
     } else if (this.fireButton.isDown) {
@@ -347,6 +359,7 @@ TopDownGame.Game.prototype = {
     this.game.physics.arcade.overlap(this.player, this.gannonBullet, this.zeldaKiller, null, this);
     this.game.physics.arcade.overlap(this.zeldaBullet, this.enemies.children, this.enemyKiller, null, this);
     this.game.physics.arcade.overlap(this.player, this.enemies.children, this.zeldaKiller, null, this);
+    this.game.physics.arcade.overlap(this.zeldaBullet, this.nonnag, this.enemyKiller, null, this);
 
   },
 
