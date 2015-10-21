@@ -17,32 +17,47 @@ TopDownGame.Game.prototype = {
     //First argument: the tileset name as specified in Tiled; Second argument: the key to the asset
     this.map.addTilesetImage('tileset', 'gameTiles');
 
-    //Create layer
+  //Create map
     this.blockedLayer = this.map.createLayer('waterLayer');
     this.backgroundLayer = this.map.createLayer('groundLayer1');
     this.backgroundLayer = this.map.createLayer('groundLayer2');
     this.backgroundLayer = this.map.createLayer('groundLayer3');
     this.backgroundLayer = this.map.createLayer('pathLayer1');
     this.backgroundLayer = this.map.createLayer('pathLayer2');
+
+    //create player
+      var result = this.findObjectsByType('playerStart', this.map, 'playerStart');
+      this.player = this.game.add.sprite(result[0].x, result[0].y, 'player');
+      this.game.physics.arcade.enable(this.player);
+      this.player.health = 10;
+
     this.blockedLayer = this.map.createLayer('CANTGOHERE');
     this.foregroundLayer = this.map.createLayer('topLayer1');
     this.foregroundLayer = this.map.createLayer('topLayer2');
     this.foregroundLayer = this.map.createLayer('topLayer3');
     this.foregroundLayer = this.map.createLayer('topLayer4');
 
+    this.foregroundLayer.bringToTop();
+
+    this.backgroundLayer.resizeWorld();
 
 
+  //physics
+    // this.game.physics.startSystem(Phaser.Physics.P2JS);
 
-    //Collision on blocked layer. 2000 is the number of bricks we can collide into - this is found in the json file for the map
-    this.map.setCollisionBetween(1, 2000, true, 'waterLayer');
-    this.map.setCollisionBetween(1, 2000, true, 'CANTGOHERE');
-    // this.map.setCollisionBetween(1, 2000, true, 'topLayer1');
-    // this.map.setCollisionBetween(1, 2000, true, 'topLayer2');
-    // this.map.setCollisionBetween(1, 2000, true, 'topLayer3');
-    // this.map.setCollisionBetween(1, 2000, true, 'topLayer4');
+    //collision
+      //Collision on blocked layer. 2000 is the number of bricks we can collide into - this is found in the json file for the map
+      this.map.setCollisionBetween(1, 2000, true, 'waterLayer');
+      this.map.setCollisionBetween(1, 2000, true, 'CANTGOHERE');
+
+      // this.game.physics.p2.convertTilemap(this.map, 'CANTGOHERE');
+      // this.game.physics.p2.enable(this.player);
+      // this.player.body.fixedRotation = true;
+      // this.player.body.clearShapes();
+      // this.player.body.addRectangle(25, 25, 0, 25);
+      // this.player.body.debug = true;
 
     //Resizes game world to match the layer dimensions
-    this.backgroundLayer.resizeWorld();
 
     this.createZeldaBullets();
     this.createGannonBullets();
@@ -53,14 +68,9 @@ TopDownGame.Game.prototype = {
 
 
     //create player
-    var result = this.findObjectsByType('playerStart', this.map, 'playerStart');
     var nonnagResult = this.findObjectsByType('nonnagStart', this.map, 'basicEnemyLayer');
 
     //we know there is just one result
-    this.player = this.game.add.sprite(result[0].x, result[0].y, 'player');
-    this.game.physics.arcade.enable(this.player);
-    this.player.health = 10;
-
     this.nonnag = this.game.add.sprite(nonnagResult[0].x-15, nonnagResult[0].y, 'nonnag');
     this.game.physics.arcade.enable(this.nonnag);
     this.nonnag.health = 50;
