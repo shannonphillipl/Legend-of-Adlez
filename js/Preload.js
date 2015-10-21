@@ -15,7 +15,7 @@ TopDownGame.Preload.prototype = {
         this.load.tilemap('world_map', 'assets/tilemaps/world_map/world_map_no_terrain.json', null, Phaser.Tilemap.TILED_JSON);
         this.load.image('gameTiles', 'assets/tilemaps/world_map/tileset.png');
         this.load.spritesheet('player', 'assets/images/player.png', 32, 32);
-        this.load.spritesheet('adlezBullet', 'assets/images/zeldaBullet.png', 32, 32);
+        this.load.spritesheet('adlezBullet', 'assets/images/adlezBullet.png', 32, 32);
         this.load.spritesheet('goon', 'assets/images/goonDown.png', 32, 32);
         this.load.spritesheet('chicken', 'assets/images/chicken.png', 32, 32);
         this.load.spritesheet('goonUp', 'assets/images/goonUp.png', 32, 32);
