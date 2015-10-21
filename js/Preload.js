@@ -15,12 +15,12 @@ TopDownGame.Preload.prototype = {
         this.load.tilemap('world_map', 'assets/tilemaps/world_map/world_map_no_terrain.json', null, Phaser.Tilemap.TILED_JSON);
         this.load.image('gameTiles', 'assets/tilemaps/world_map/tileset.png');
         this.load.spritesheet('player', 'assets/images/player.png', 32, 32);
-        this.load.spritesheet('zeldaBullet', 'assets/images/zeldaBullet.png', 32, 32);
+        this.load.spritesheet('adlezBullet', 'assets/images/zeldaBullet.png', 32, 32);
         this.load.spritesheet('goon', 'assets/images/goonDown.png', 32, 32);
         this.load.spritesheet('chicken', 'assets/images/chicken.png', 32, 32);
         this.load.spritesheet('goonUp', 'assets/images/goonUp.png', 32, 32);
-        this.load.spritesheet('nonnag', 'assets/images/nonnag.png', 44, 70);
-        this.load.spritesheet('gannonBullet', 'assets/images/gannonBullet.png', 32, 32);
+        this.load.spritesheet('nonag', 'assets/images/nonag.png', 44, 70);
+        this.load.spritesheet('nonagBullet', 'assets/images/nonagBullet.png', 32, 32);
         this.game.load.spritesheet('kaboom', 'assets/images/explosion.png', 64, 64);
 
         this.load.audio('adlezSong', ['assets/audio/adlezSong.mp3', 'assets/audio/adlezSong.ogg']);
@@ -30,7 +30,7 @@ TopDownGame.Preload.prototype = {
         this.load.audio('boom', ['assets/audio/boom.mp3', 'assets/audio/boom.ogg']);
 
     },
-    
+
     create: function() {
         this.state.start('Game');
     }

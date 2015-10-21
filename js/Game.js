@@ -53,8 +53,8 @@ TopDownGame.Game.prototype = {
       this.map.setCollisionBetween(1, 2000, true, 'CANTGOHERE');
 
 
-        this.createZeldaBullets();
-        this.createGannonBullets();
+        this.createAdlezBullets();
+        this.createNonagBullets();
         this.createExplosions();
 
         this.createEnemies();
@@ -76,8 +76,8 @@ TopDownGame.Game.prototype = {
     //move player with cursor keys
         this.cursors = this.game.input.keyboard.createCursorKeys();
 
-        this.zeldaBulletTime = 0;
-        this.gannonBulletTime = 0;
+        this.adlezBulletTime = 0;
+        this.nonagBulletTime = 0;
 
         this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
@@ -85,26 +85,26 @@ TopDownGame.Game.prototype = {
         this.player.animations.add('right', [8, 9, 10, 11], 7, true);
         this.player.animations.add('down', [0, 1, 2, 3], 7, true);
         this.player.animations.add('up', [12, 13, 14, 15], 7, true);
-        this.zeldaBullets.callAll('animations.add', 'animations', 'left', [8, 9, 10, 11], 7, true);
-        this.zeldaBullets.callAll('animations.add', 'animations', 'right', [4, 5, 6, 7], 7, true);
-        this.zeldaBullets.callAll('animations.add', 'animations', 'down', [12, 13, 14, 15], 7, true);
-        this.zeldaBullets.callAll('animations.add', 'animations', 'up', [0, 1, 2, 3], 7, true);
-        this.gannonBullets.callAll('animations.add', 'animations', 'shoot', [0, 1, 2, 3, 4, 5], 10, true);
+        this.adlezBullets.callAll('animations.add', 'animations', 'left', [8, 9, 10, 11], 7, true);
+        this.adlezBullets.callAll('animations.add', 'animations', 'right', [4, 5, 6, 7], 7, true);
+        this.adlezBullets.callAll('animations.add', 'animations', 'down', [12, 13, 14, 15], 7, true);
+        this.adlezBullets.callAll('animations.add', 'animations', 'up', [0, 1, 2, 3], 7, true);
+        this.nonagBullets.callAll('animations.add', 'animations', 'shoot', [0, 1, 2, 3, 4, 5], 10, true);
         this.explosions.callAll('animations.add', 'animations', 'kaboom', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], 15, true);
 
 
 
 //Non-Playable Characters
     //create boss
-        var nonnagResult = this.findObjectsByType('nonnagStart', this.map, 'basicEnemyLayer');
-            this.nonnag = this.game.add.sprite(nonnagResult[0].x-15, nonnagResult[0].y, 'nonnag');
-            this.game.physics.arcade.enable(this.nonnag);
-            this.nonnag.health = 10;
-            this.game.add.tween(this.nonnag).to( { x: this.nonnag.x+randomIntFromInterval(30,50) }, randomIntFromInterval(400,800), Phaser.Easing.Linear.None, true, 0, 1000, true);
+        var nonagResult = this.findObjectsByType('nonnagStart', this.map, 'basicEnemyLayer');
+            this.nonag = this.game.add.sprite(nonagResult[0].x-15, nonagResult[0].y, 'nonag');
+            this.game.physics.arcade.enable(this.nonag);
+            this.nonag.health = 10;
+            this.game.add.tween(this.nonag).to( { x: this.nonag.x+randomIntFromInterval(30,50) }, randomIntFromInterval(400,800), Phaser.Easing.Linear.None, true, 0, 1000, true);
 
     //add non-player spritesheets
-        this.zeldaBullet = this.game.add.sprite('zeldaBullet');
-        this.gannonBullet = this.game.add.sprite('gannonBullet');
+        this.adlezBullet = this.game.add.sprite('adlezBullet');
+        this.nonagBullet = this.game.add.sprite('nonagBullet');
 
         this.goons = this.game.add.sprite('goonDown');
         this.chickens = this.game.add.sprite('chicken');
@@ -160,80 +160,80 @@ TopDownGame.Game.prototype = {
 
 //BULLETS
     //player bullets
-        createZeldaBullets: function() {
-            this.zeldaBullets = this.game.add.group();
-            this.zeldaBullets.enableBody = true;
-            this.zeldaBullets.physicsBodyType = Phaser.Physics.ARCADE;
-            this.zeldaBullets.createMultiple(40, 'zeldaBullet');
-            this.zeldaBullets.setAll('anchor.x', 0.5);
-            this.zeldaBullets.setAll('anchor.y', 1);
-            this.zeldaBullets.setAll('outOfBoundsKill', true);
-            this.zeldaBullets.setAll('checkWorldBounds', true);
+        createAdlezBullets: function() {
+            this.adlezBullets = this.game.add.group();
+            this.adlezBullets.enableBody = true;
+            this.adlezBullets.physicsBodyType = Phaser.Physics.ARCADE;
+            this.adlezBullets.createMultiple(40, 'adlezBullet');
+            this.adlezBullets.setAll('anchor.x', 0.5);
+            this.adlezBullets.setAll('anchor.y', 1);
+            this.adlezBullets.setAll('outOfBoundsKill', true);
+            this.adlezBullets.setAll('checkWorldBounds', true);
         },
 
     //boss bullets
-        createGannonBullets: function() {
-            this.gannonBullets = this.game.add.group();
-            this.gannonBullets.enableBody = true;
-            this.gannonBullets.physicsBodyType = Phaser.Physics.ARCADE;
-            this.gannonBullets.createMultiple(200, 'gannonBullet');
-            this.gannonBullets.setAll('anchor.x', 0.5);
-            this.gannonBullets.setAll('anchor.y', 1);
-            this.gannonBullets.setAll('outOfBoundsKill', true);
-            this.gannonBullets.setAll('checkWorldBounds', true);
+        createNonagBullets: function() {
+            this.nonagBullets = this.game.add.group();
+            this.nonagBullets.enableBody = true;
+            this.nonagBullets.physicsBodyType = Phaser.Physics.ARCADE;
+            this.nonagBullets.createMultiple(200, 'nonagBullet');
+            this.nonagBullets.setAll('anchor.x', 0.5);
+            this.nonagBullets.setAll('anchor.y', 1);
+            this.nonagBullets.setAll('outOfBoundsKill', true);
+            this.nonagBullets.setAll('checkWorldBounds', true);
         },
 
     //fire player bullets
         fireBullet: function() {
-            if (this.game.time.now > this.zeldaBulletTime) {
+            if (this.game.time.now > this.adlezBulletTime) {
                 //  Grab the first bullet we can from the pool
-                this.zeldaBullet = this.zeldaBullets.getFirstExists(false);
+                this.adlezBullet = this.adlezBullets.getFirstExists(false);
             //Add sound to Adlez bullet
             adlezSpellSound = this.sound.play('adlezSpell', 1, 4);
-                if (this.zeldaBullet) {
+                if (this.adlezBullet) {
                 //  And fire it
                     if (this.player.facing == "right") {
-                        this.zeldaBullets.callAllExists('play', false, 'right');
-                        this.zeldaBullet.reset(this.player.x + 30, this.player.y + 30);
-                        this.zeldaBullet.body.velocity.x = 200;
-                        this.zeldaBulletTime = this.game.time.now + 200;
+                        this.adlezBullets.callAllExists('play', false, 'right');
+                        this.adlezBullet.reset(this.player.x + 30, this.player.y + 30);
+                        this.adlezBullet.body.velocity.x = 200;
+                        this.adlezBulletTime = this.game.time.now + 200;
                     } else if (this.player.facing == "up") {
-                        this.zeldaBullets.callAllExists('play', false, 'up');
-                        this.zeldaBullet.reset(this.player.x + 16, this.player.y + 10);
-                        this.zeldaBullet.body.velocity.y = -200;
-                        this.zeldaBulletTime = this.game.time.now + 200;
+                        this.adlezBullets.callAllExists('play', false, 'up');
+                        this.adlezBullet.reset(this.player.x + 16, this.player.y + 10);
+                        this.adlezBullet.body.velocity.y = -200;
+                        this.adlezBulletTime = this.game.time.now + 200;
                     } else if (this.player.facing == "left") {
-                        this.zeldaBullets.callAllExists('play', false, 'left');
-                        this.zeldaBullet.reset(this.player.x + 5, this.player.y + 30);
-                        this.zeldaBullet.body.velocity.x = -200;
-                        this.zeldaBulletTime = this.game.time.now + 200;
+                        this.adlezBullets.callAllExists('play', false, 'left');
+                        this.adlezBullet.reset(this.player.x + 5, this.player.y + 30);
+                        this.adlezBullet.body.velocity.x = -200;
+                        this.adlezBulletTime = this.game.time.now + 200;
                     } else if (this.player.facing == "down") {
-                        this.zeldaBullets.callAllExists('play', false, 'down');
-                        this.zeldaBullet.reset(this.player.x + 16, this.player.y + 40);
-                        this.zeldaBullet.body.velocity.y = 200;
-                        this.zeldaBulletTime = this.game.time.now + 200;
+                        this.adlezBullets.callAllExists('play', false, 'down');
+                        this.adlezBullet.reset(this.player.x + 16, this.player.y + 40);
+                        this.adlezBullet.body.velocity.y = 200;
+                        this.adlezBulletTime = this.game.time.now + 200;
                     }
                 }
             }
         },
 
     //fire boss bullets
-        fireGannonBullet: function() {
-            if (this.game.time.now > this.gannonBulletTime) {
+        fireNonagBullet: function() {
+            if (this.game.time.now > this.nonagBulletTime) {
                 //  Grab the first bullet we can from the pool
-                this.gannonBullet = this.gannonBullets.getFirstExists(false);
-                if (this.gannonBullet) {
-                    this.gannonBullets.callAllExists('play', false, 'shoot');
-                    this.gannonBullet.reset(this.nonnag.x+20, this.nonnag.y + 30);
-                    this.gannonBullet.body.velocity.y = 200;
-                    this.gannonBulletTime = this.game.time.now + randomIntFromInterval(80,800);
+                this.nonagBullet = this.nonagBullets.getFirstExists(false);
+                if (this.nonagBullet) {
+                    this.nonagBullets.callAllExists('play', false, 'shoot');
+                    this.nonagBullet.reset(this.nonag.x+20, this.nonag.y + 30);
+                    this.nonagBullet.body.velocity.y = 200;
+                    this.nonagBulletTime = this.game.time.now + randomIntFromInterval(80,800);
                 }
             }
         },
 
     //remove enemy from map
-        enemyKiller: function(zeldaBullet, enemy) {
-            this.zeldaBullet.kill();
+        enemyKiller: function(adlezBullet, enemy) {
+            this.adlezBullet.kill();
 
             if (enemy.key == "chicken") {
                 this.explosion = this.explosions.getFirstExists(false);
@@ -244,7 +244,7 @@ TopDownGame.Game.prototype = {
                 enemy.kill();
             } else if (enemy.key == "goon") {
                 enemy.health -=1;
-                this.zeldaBullet.kill();
+                this.adlezBullet.kill();
 
                 if(enemy.health <= 0){
                     enemy.kill();
@@ -254,9 +254,9 @@ TopDownGame.Game.prototype = {
                     this.sound.play('boom');
                     this.sound.play('adlezLaugh');
                 }
-            } else if (enemy.key == "nonnag") {
+            } else if (enemy.key == "nonag") {
                 enemy.health -=1;
-                this.zeldaBullet.kill();
+                this.adlezBullet.kill();
                 if(enemy.health <= 0){
                     enemy.kill();
                     this.explosion = this.explosions.getFirstExists(false);
@@ -268,15 +268,15 @@ TopDownGame.Game.prototype = {
             }
         },
 
-    //remove zelda from map
-        zeldaKiller: function(player, enemy) {
+    //remove adlez from map
+        adlezKiller: function(player, enemy) {
             this.xdirection = this.player.body.x - enemy.body.x;
             this.ydirection = enemy.body.y - this.player.body.y;
             this.xbounceVelocity = this.xdirection * 40;
             this.ybounceVelocity = this.ydirection * -40;
             this.player.body.velocity.y = this.ybounceVelocity;
             this.player.body.velocity.x = this.xbounceVelocity;
-                if (enemy.key == "gannonBullet") {
+                if (enemy.key == "nonagBullet") {
                   player.health -=1
                 }
                 if (enemy.key == "goon") {
@@ -304,13 +304,13 @@ TopDownGame.Game.prototype = {
         },
 
     //remove bullet if offscreen
-        resetZeldaBullet: function(bullet) {
-            this.zeldaBullet.kill();
+        resetAdlezBullet: function(bullet) {
+            this.adlezBullet.kill();
         },
 
     //remove bullet if offscreen
-        resetGannonBullet: function(bullet) {
-            this.gannonBullet.kill();
+        resetNonagBullet: function(bullet) {
+            this.nonagBullet.kill();
         },
 
     //find objects in a Tiled layer that containt a property called "type" equal to a certain value
@@ -334,7 +334,7 @@ TopDownGame.Game.prototype = {
         this.text.x = this.game.camera.x;
         this.text.y = this.game.camera.y;
 
-        this.fireGannonBullet();
+        this.fireNonagBullet();
 
 
         if(this.cursors.up.isDown) {
@@ -367,12 +367,12 @@ TopDownGame.Game.prototype = {
         //collision
             this.game.physics.arcade.collide(this.player, this.blockedLayer);
             this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
-            this.game.physics.arcade.overlap(this.zeldaBullet, this.goon, this.goonKiller, null, this);
+            this.game.physics.arcade.overlap(this.adlezBullet, this.goon, this.goonKiller, null, this);
 
         //HERE!
-            this.game.physics.arcade.overlap(this.player, this.gannonBullet, this.zeldaKiller, null, this);
-            this.game.physics.arcade.overlap(this.zeldaBullet, this.enemies.children, this.enemyKiller, null, this);
-            this.game.physics.arcade.overlap(this.player, this.enemies.children, this.zeldaKiller, null, this);
-            this.game.physics.arcade.overlap(this.zeldaBullet, this.nonnag, this.enemyKiller, null, this);
+            this.game.physics.arcade.overlap(this.player, this.nonagBullet, this.adlezKiller, null, this);
+            this.game.physics.arcade.overlap(this.adlezBullet, this.enemies.children, this.enemyKiller, null, this);
+            this.game.physics.arcade.overlap(this.player, this.enemies.children, this.adlezKiller, null, this);
+            this.game.physics.arcade.overlap(this.adlezBullet, this.nonag, this.enemyKiller, null, this);
     },
 }
