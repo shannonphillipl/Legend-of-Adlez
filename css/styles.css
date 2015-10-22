@@ -1,3 +1,19 @@
 body {
 	background-color: white;
 }
+
+#game-frame {
+	height: 50em;
+	width: 50em;
+	margin: 0 auto;
+	margin-top: 2em;
+	border: 1em solid black;
+	border-bottom: 5.3em solid black;
+}
+
+#game-frame img {
+	margin-top: 3px;
+	z-index: 10000000;
+	position: relative;
+	margin-right: 8px;
+}
