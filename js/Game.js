@@ -264,6 +264,7 @@ TopDownGame.Game.prototype = {
                 }
             } else if (enemy.key == "nonag") {
                 enemy.health -=1;
+                console.log(enemy.health);
                 this.adlezBullet.kill();
                 if(enemy.health <= 0){
                     enemy.kill();
@@ -308,15 +309,21 @@ TopDownGame.Game.prototype = {
         },
 
     //remove bullet if offscreen
-        resetAdlezBullet: function(bullet) {
-            this.adlezBullet.kill();
+        resetAdlezBullet: function() {
+          this.adlezBullet.kill();
         },
 
     //remove bullet if offscreen
-        resetNonagBullet: function(bullet) {
+        resetNonagBullet: function() {
             this.nonagBullet.kill();
         },
 
+    //Remove Nonag's bullets i
+        updateNonagBullet: function() {
+            if (this.nonagBullet.y > this.nonag.y + 150) {
+              this.nonagBullet.kill();
+            }
+        },
 
     update: function() {
         //player movement
@@ -352,11 +359,12 @@ TopDownGame.Game.prototype = {
             this.player.animations.stop();
         }
 
-
-
+        this.updateNonagBullet;
 
         //collision
             this.game.physics.arcade.collide(this.player, this.blockedLayer);
+            this.game.physics.arcade.collide(this.nonagBullet, this.blockedLayer, this.resetNonagBullet, null, this);
+            this.game.physics.arcade.collide(this.adlezBullet, this.blockedLayer, this.resetAdlezBullet, null, this);
             this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
 
         //Player interactions (magic, running into enemies, etc)
