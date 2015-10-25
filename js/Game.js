@@ -233,6 +233,9 @@ TopDownGame.Game.prototype = {
             if (this.game.time.now > this.nonagBulletTime) {
                 //  Grab the first bullet we can from the pool
                 this.nonagBullet = this.nonagBullets.getFirstExists(false);
+                if (this.nonag.health <= 0) {
+                  this.nonagBullet = false;
+                }
                 if (this.nonagBullet) {
                     this.nonagBullets.callAllExists('play', false, 'shoot');
                     this.nonagBullet.reset(this.nonag.x+20, this.nonag.y + 30);
@@ -304,6 +307,7 @@ TopDownGame.Game.prototype = {
                   this.explosion.reset(this.player.body.x, this.player.body.y);
                   this.explosion.play('kaboom', 30, false, true);
                   this.sound.play('boom');
+                  this.fireButton = [];
                 }
         },
 
@@ -347,7 +351,6 @@ TopDownGame.Game.prototype = {
           var goonsArray = [];
           this.enemies.forEach(function(enemy) {
             if (enemy.key == "goon") {
-              debugger;
               goonsArray.push(enemy);
             }
           });
@@ -355,7 +358,6 @@ TopDownGame.Game.prototype = {
           goonsArray.forEach(function(goon) {
             if (goon.y > goon.prevY) {
               goon.play('down');
-              debugger;
             } else {
               goon.play('up');
             }
