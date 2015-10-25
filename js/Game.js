@@ -13,7 +13,7 @@ TopDownGame.Game.prototype = {
 
         //Add music
           music = this.add.audio('adlezSong');
-          music.play();
+          // music.play();
 
         //First argument: the tileset name as specified in Tiled; Second argument: the key to the asset
         this.map.addTilesetImage('tileset', 'gameTiles');
@@ -205,21 +205,25 @@ TopDownGame.Game.prototype = {
                         this.adlezBullet.reset(this.player.x + 30, this.player.y + 30);
                         this.adlezBullet.body.velocity.x = 200;
                         this.adlezBulletTime = this.game.time.now + 200;
+                        this.adlezBullet.lifespan = 1000;
                     } else if (this.player.facing == "up") {
                         this.adlezBullets.callAllExists('play', false, 'up');
                         this.adlezBullet.reset(this.player.x + 16, this.player.y + 10);
                         this.adlezBullet.body.velocity.y = -200;
                         this.adlezBulletTime = this.game.time.now + 200;
+                        this.adlezBullet.lifespan = 1000;
                     } else if (this.player.facing == "left") {
                         this.adlezBullets.callAllExists('play', false, 'left');
                         this.adlezBullet.reset(this.player.x + 5, this.player.y + 30);
                         this.adlezBullet.body.velocity.x = -200;
                         this.adlezBulletTime = this.game.time.now + 200;
+                        this.adlezBullet.lifespan = 1000;
                     } else if (this.player.facing == "down") {
                         this.adlezBullets.callAllExists('play', false, 'down');
                         this.adlezBullet.reset(this.player.x + 16, this.player.y + 40);
                         this.adlezBullet.body.velocity.y = 200;
                         this.adlezBulletTime = this.game.time.now + 200;
+                        this.adlezBullet.lifespan = 1000;
                     }
                 }
             }
@@ -234,6 +238,8 @@ TopDownGame.Game.prototype = {
                     this.nonagBullets.callAllExists('play', false, 'shoot');
                     this.nonagBullet.reset(this.nonag.x+20, this.nonag.y + 30);
                     this.nonagBullet.body.velocity.y = 200;
+
+                    this.nonagBullet.lifespan = 770;
                     this.nonagBulletTime = this.game.time.now + randomIntFromInterval(80,800);
                 }
             }
@@ -318,13 +324,6 @@ TopDownGame.Game.prototype = {
             this.nonagBullet.kill();
         },
 
-    //Remove Nonag's bullets i
-        updateNonagBullet: function() {
-            if (this.nonagBullet.y > this.nonag.y + 150) {
-              this.nonagBullet.kill();
-            }
-        },
-
     update: function() {
         //player movement
         this.player.body.velocity.y = 0;
@@ -358,8 +357,6 @@ TopDownGame.Game.prototype = {
         }else {
             this.player.animations.stop();
         }
-
-        this.updateNonagBullet;
 
         //collision
             this.game.physics.arcade.collide(this.player, this.blockedLayer);
