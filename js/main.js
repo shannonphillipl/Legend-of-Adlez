@@ -1,6 +1,6 @@
 var LegendOfAdlez = LegendOfAdlez || {};
 
-LegendOfAdlez.game = new Phaser.Game(260, 260, Phaser.AUTO, 'game');
+LegendOfAdlez.game = new Phaser.Game(450, 450, Phaser.AUTO, 'game');
 
 LegendOfAdlez.game.state.add('Boot', LegendOfAdlez.Boot);
 LegendOfAdlez.game.state.add('Preload', LegendOfAdlez.Preload);

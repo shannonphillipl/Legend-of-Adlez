@@ -17,7 +17,7 @@ LegendOfAdlez.Preload.prototype = {
         //load game assets
         this.load.tilemap('world_map', 'assets/tilemaps/world_map/world_map_no_terrain.json', null, Phaser.Tilemap.TILED_JSON);
         this.load.image('gameTiles', 'assets/tilemaps/world_map/tileset.png');
-        this.load.image('gameTiles', 'assets/images/map.png');
+        this.load.image('map', 'assets/images/map.png');
         this.load.spritesheet('player', 'assets/images/player.png', 32, 32);
         this.load.spritesheet('adlezBullet', 'assets/images/adlezBullet.png', 32, 32);
         this.load.spritesheet('goon', 'assets/images/goon.png', 32, 32);
