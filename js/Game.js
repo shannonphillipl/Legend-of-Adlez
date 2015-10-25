@@ -119,7 +119,9 @@ TopDownGame.Game.prototype = {
                 this.chicken = this.enemies.create(element.x, element.y, 'chicken');
                 this.chicken.anchor.setTo(0.5, 0.5);
                 this.chicken.animations.add('right', [3, 4, 5, 6], 7, true);
-                this.chicken.play('right');
+                this.chicken.animations.add('left', [7, 8], 7, true);
+                // this.chicken.play('right');
+                this.chicken.prevX = this.chicken.x;
                 this.chicken.body.moves = false;
                 this.chicken.anchor.x = 0.5;
                 this.chicken.anchor.y = 0.5;
@@ -324,6 +326,25 @@ TopDownGame.Game.prototype = {
             this.nonagBullet.kill();
         },
 
+    //Updates chickens animation. First, we search for all chickens and put them in array. Then, we see which direction they're moving and set the animation.
+        updateChickenAnimation: function() {
+          var chickensArray = [];
+          this.enemies.forEach(function(enemy) {
+            if (enemy.key == "chicken") {
+              chickensArray.push(enemy);
+            }
+          });
+
+          chickensArray.forEach(function(chicken) {
+            if (chicken.x > chicken.prevX) {
+              chicken.play('right');
+            } else {
+              chicken.play('left');
+            }
+            chicken.prevX = chicken.x;
+          });
+        },
+
     update: function() {
         //player movement
         this.player.body.velocity.y = 0;
@@ -357,6 +378,9 @@ TopDownGame.Game.prototype = {
         }else {
             this.player.animations.stop();
         }
+
+        //Update NPC animations
+          this.updateChickenAnimation();
 
         //collision
             this.game.physics.arcade.collide(this.player, this.blockedLayer);
