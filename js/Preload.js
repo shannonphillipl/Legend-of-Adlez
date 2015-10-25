@@ -1,11 +1,14 @@
-var TopDownGame = TopDownGame || {};
+var LegendOfAdlez = LegendOfAdlez || {};
 
 //Loading the game assets
-TopDownGame.Preload = function(){};
+LegendOfAdlez.Preload = function(){};
 
-TopDownGame.Preload.prototype = {
+LegendOfAdlez.Preload.prototype = {
     preload: function() {
         //show loading screen
+        this.splash = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'logo');
+        this.splash.anchor.setTo(0.5);
+
         this.preloadBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY + 128, 'preloadbar');
         this.preloadBar.anchor.setTo(0.5);
 
@@ -14,6 +17,7 @@ TopDownGame.Preload.prototype = {
         //load game assets
         this.load.tilemap('world_map', 'assets/tilemaps/world_map/world_map_no_terrain.json', null, Phaser.Tilemap.TILED_JSON);
         this.load.image('gameTiles', 'assets/tilemaps/world_map/tileset.png');
+        this.load.image('gameTiles', 'assets/images/map.png');
         this.load.spritesheet('player', 'assets/images/player.png', 32, 32);
         this.load.spritesheet('adlezBullet', 'assets/images/adlezBullet.png', 32, 32);
         this.load.spritesheet('goon', 'assets/images/goon.png', 32, 32);
@@ -32,6 +36,6 @@ TopDownGame.Preload.prototype = {
     },
 
     create: function() {
-        this.state.start('Game');
+        this.state.start('MainMenu');
     }
 };

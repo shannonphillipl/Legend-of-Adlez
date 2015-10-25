@@ -1,13 +1,13 @@
-var TopDownGame = TopDownGame || {};
+var LegendOfAdlez = LegendOfAdlez || {};
 
 //title screen
-TopDownGame.Game = function(){};
+LegendOfAdlez.Game = function(){};
 
     var music;
     var adlezSpellSound;
 
 //create game instance
-TopDownGame.Game.prototype = {
+LegendOfAdlez.Game.prototype = {
     create: function() {
         this.map = this.game.add.tilemap('world_map');
 

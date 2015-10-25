@@ -1,11 +1,12 @@
-var TopDownGame = TopDownGame || {};
+var LegendOfAdlez = LegendOfAdlez || {};
 
-TopDownGame.Boot = function(){};
+LegendOfAdlez.Boot = function(){};
 
 //set game config and loading assets for the loading screen:
-TopDownGame.Boot.prototype = {
+LegendOfAdlez.Boot.prototype = {
   preload: function() {
     //assets for loading screen:
+    this.load.image('logo', 'assets/images/logo.png');
     this.load.image('preloadbar', 'assets/images/preloader-bar.png');
   },
   create: function() {
