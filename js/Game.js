@@ -102,9 +102,6 @@ TopDownGame.Game.prototype = {
         this.adlezBullet = this.game.add.sprite('adlezBullet');
         this.nonagBullet = this.game.add.sprite('nonagBullet');
 
-        this.goons = this.game.add.sprite('goonDown');
-        this.chickens = this.game.add.sprite('chicken');
-
     },
     //create NPC's
         createEnemies: function() {
@@ -120,7 +117,6 @@ TopDownGame.Game.prototype = {
                 this.chicken.anchor.setTo(0.5, 0.5);
                 this.chicken.animations.add('right', [3, 4, 5, 6], 7, true);
                 this.chicken.animations.add('left', [7, 8], 7, true);
-                // this.chicken.play('right');
                 this.chicken.prevX = this.chicken.x;
                 this.chicken.body.moves = false;
                 this.chicken.anchor.x = 0.5;
@@ -134,12 +130,13 @@ TopDownGame.Game.prototype = {
             result.forEach(function(element) {
                 this.goon = this.enemies.create(element.x, element.y, 'goon');
                 this.goon.anchor.setTo(0.5, 0.5);
-                this.goon.animations.add('down', [0, 1, 2, 3], 20, true);
-                this.goon.play('down');
+                this.goon.animations.add('down', [0, 1, 2, 3], 10, true);
+                this.goon.animations.add('up', [4, 5, 6, 7], 10, true);
+                this.goon.prevY = this.goon.y;
                 this.goon.body.moves = false;
                 this.goon.anchor.x = 0.5;
                 this.goon.anchor.y = 0.5;
-                this.goon.health = randomIntFromInterval(5,10);
+                this.goon.health = 5;
                 this.tween = this.game.add.tween(this.goon).to( { y: this.goon.y+randomIntFromInterval(60,80) }, randomIntFromInterval(400,600), Phaser.Easing.Linear.None, true, 0, 1000, true);
             }, this);
 
@@ -345,6 +342,27 @@ TopDownGame.Game.prototype = {
           });
         },
 
+    //Updates chickens animation. First, we search for all chickens and put them in array. Then, we see which direction they're moving and set the animation.
+        updateGoonAnimation: function() {
+          var goonsArray = [];
+          this.enemies.forEach(function(enemy) {
+            if (enemy.key == "goon") {
+              debugger;
+              goonsArray.push(enemy);
+            }
+          });
+
+          goonsArray.forEach(function(goon) {
+            if (goon.y > goon.prevY) {
+              goon.play('down');
+              debugger;
+            } else {
+              goon.play('up');
+            }
+            goon.prevY = goon.y;
+          });
+        },
+
     update: function() {
         //player movement
         this.player.body.velocity.y = 0;
@@ -381,6 +399,7 @@ TopDownGame.Game.prototype = {
 
         //Update NPC animations
           this.updateChickenAnimation();
+          this.updateGoonAnimation();
 
         //collision
             this.game.physics.arcade.collide(this.player, this.blockedLayer);

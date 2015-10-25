@@ -16,9 +16,9 @@ TopDownGame.Preload.prototype = {
         this.load.image('gameTiles', 'assets/tilemaps/world_map/tileset.png');
         this.load.spritesheet('player', 'assets/images/player.png', 32, 32);
         this.load.spritesheet('adlezBullet', 'assets/images/adlezBullet.png', 32, 32);
-        this.load.spritesheet('goon', 'assets/images/goonDown.png', 32, 32);
+        this.load.spritesheet('goon', 'assets/images/goon.png', 32, 32);
         this.load.spritesheet('chicken', 'assets/images/chicken.png', 32, 32);
-        this.load.spritesheet('goonUp', 'assets/images/goonUp.png', 32, 32);
+        this.load.spritesheet('goonUp', 'assets/images/goon.png', 32, 32);
         this.load.spritesheet('nonag', 'assets/images/nonag.png', 44, 70);
         this.load.spritesheet('nonagBullet', 'assets/images/nonagBullet.png', 32, 32);
         this.game.load.spritesheet('kaboom', 'assets/images/explosion.png', 64, 64);
