@@ -243,7 +243,7 @@ LegendOfAdlez.Game.prototype = {
                     this.nonagBullet.body.velocity.y = 200;
 
                     this.nonagBullet.lifespan = 770;
-                    this.nonagBulletTime = this.game.time.now + randomIntFromInterval(80,800);
+                    this.nonagBulletTime = this.game.time.now + randomIntFromInterval(1500,3000);
                 }
             }
         },
