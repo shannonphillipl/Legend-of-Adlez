@@ -76,6 +76,7 @@ LegendOfAdlez.Game.prototype = {
         this.nonagBulletTime = 0;
 
         this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        this.restartButton = [];
 
         this.player.animations.add('left', [4, 5, 6, 7], 7, true);
         this.player.animations.add('right', [8, 9, 10, 11], 7, true);
@@ -308,6 +309,7 @@ LegendOfAdlez.Game.prototype = {
                   this.explosion.play('kaboom', 30, false, true);
                   this.sound.play('boom');
                   this.fireButton = [];
+                  this.gameOver();
                 }
         },
 
@@ -365,6 +367,17 @@ LegendOfAdlez.Game.prototype = {
           });
         },
 
+        gameOver: function() {
+          var text = "Eluryh will fall if you don't"
+          var text2 = "press SPACE to restart!";
+          var style = { font: "30px Arial", fill: "#fff", align: "center" };
+          var t = this.game.add.text(this.player.x, this.player.y, text, style);
+          var t2 = this.game.add.text(this.player.x, this.player.y+50, text2, style);
+          t.anchor.set(0.5);
+          t2.anchor.set(0.5);
+          this.restartButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        },
+
     update: function() {
         //player movement
         this.player.body.velocity.y = 0;
@@ -372,6 +385,9 @@ LegendOfAdlez.Game.prototype = {
 
         this.fireNonagBullet();
 
+        if(this.restartButton.isDown) {
+          this.game.state.start('MainMenu', true, false);
+        }
 
         if(this.cursors.up.isDown) {
             this.player.facing = "up";
