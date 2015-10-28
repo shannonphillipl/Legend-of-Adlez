@@ -13,7 +13,7 @@ LegendOfAdlez.Game.prototype = {
 
         //Add music
           music = this.add.audio('adlezSong');
-          // music.play();
+          music.play();
 
         //First argument: the tileset name as specified in Tiled; Second argument: the key to the asset
         this.map.addTilesetImage('tileset', 'gameTiles');
@@ -243,7 +243,7 @@ LegendOfAdlez.Game.prototype = {
                     this.nonagBullet.body.velocity.y = 200;
 
                     this.nonagBullet.lifespan = 770;
-                    this.nonagBulletTime = this.game.time.now + randomIntFromInterval(80,800);
+                    this.nonagBulletTime = this.game.time.now + randomIntFromInterval(1500,3000);
                 }
             }
         },
