@@ -1,6 +1,6 @@
 # The Legend of Adlez
 
-##### Group project for Javascript and Angular.
+##### A JavaScript game in the style of an SNES RPG.
 
 #### By Phillip Shannon, Chris Swan, Alex Costa, & Ike Mattice
 
