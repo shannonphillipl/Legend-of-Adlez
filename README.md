@@ -6,7 +6,8 @@
 
 ## Description
 A game similar to Zelda(Hence the reverse name of it Adlez). Created using HTML 5, Phaser, Javascript and Angular.
-http://www.the-legend-of-adlez.therealphilshannon.xyz/
+
+
 ## Setup
 
 * Clone the project using the link provided on Github in the Terminal by using ```git clone```.
